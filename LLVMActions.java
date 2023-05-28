@@ -151,21 +151,6 @@ public class LLVMActions extends KostLangBaseListener {
        }
     }
 
-
-    @Override 
-    public void exitToint(KostLangParser.TointContext ctx) { 
-       Value v = stack.pop();
-       LLVMGenerator.fptosi( v.name );
-       stack.push( new Value("%"+(LLVMGenerator.reg-1), VarType.INT, 0) ); 
-    }
-
-    @Override 
-    public void exitToreal(KostLangParser.TorealContext ctx) { 
-       Value v = stack.pop();
-       LLVMGenerator.sitofp( v.name );
-       stack.push( new Value("%"+(LLVMGenerator.reg-1), VarType.REAL, 0) ); 
-    }
-
     @Override
     public void exitPrint(KostLangParser.PrintContext ctx) {
        String ID = ctx.ID().getText();
