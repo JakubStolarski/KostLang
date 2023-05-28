@@ -195,7 +195,7 @@ class LLVMGenerator{
       text += "@strps = constant [4 x i8] c\"%s\\0A\\00\"\n";
       text += "@strpi = constant [4 x i8] c\"%d\\0A\\00\"\n";
       text += "@strpd = constant [4 x i8] c\"%f\\0A\\00\"\n";
-      text += "@strs = constant [5 x i8] c\"%d\\00\"\n";
+      text += "@strs = constant [5 x i8] c\"%10s\\00\"\n";
       text += "@strspi = constant [3 x i8] c\"%d\\00\"\n";
       text += header_text;
       text += "define i32 @main() nounwind{\n";
