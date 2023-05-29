@@ -6,7 +6,11 @@ prog: (stat? NEWLINE )*
 stat:	 ID '=' expr0		#assign
 	| PRINT ID   		#print
 	| READ ID   		#read
-    | WRITE ID          #write
+    	| WRITE ID          	#write
+    	| ID '=' '[' intarr ']'		#intarray
+    	| ID '=' '[' realarr ']'	#realarray
+    	| PUSH '(' ID ',' expr0 ')' 	#push
+    	| POP '(' ID ')' 		#pop
 ;
 
 expr0:  expr1			#single0
@@ -19,18 +23,32 @@ expr1:  expr2			#single1
       | expr2 DIV expr2     #div 
 ;
 
-expr2: ID          #id     
+expr2: ID          		#id     
       | INT			#int
       | REAL			#real
       | '(' expr0 ')'		#par
-      | TOINT expr2		    #toint
-      | TOREAL expr2		#toreal
-      | STRING          #string
-      | TRUE            #true
-      | FALSE           #false
+      | STRING          	#string
+      | TRUE            	#true
+      | FALSE           	#false
+      | GET '(' ID ',' INT ')'	#get
+      | LENGTH '(' ID ')'	#length
+      | POP '(' ID ')' 		#popreturn
 ;
 
+intarr: INT
+	| INT ',' intarr
+;
 
+realarr: REAL
+	| REAL ',' realarr
+;
+
+GET:  'get'
+    ;
+    
+LENGTH:  'length'
+    ;
+    
 PRINT:	'print' 
     ;
 
@@ -58,12 +76,6 @@ REAL: '0'..'9'+'.''0'..'9'+
 INT: '0'..'9'+
     ;
 
-TOINT: '(int)'
-    ;
-
-TOREAL: '(real)'
-    ;
-
 ADD: '+'
     ;
 
@@ -76,8 +88,14 @@ MULT: '*'
 DIV: '/'
     ;
 
+PUSH: 'push!'
+    ;
+    
+POP:  'pop!'
+    ;
+
 NEWLINE:	'\r'? '\n'
     ;
 
-WS:   (' '|'\t')+ { skip(); }
+WS:   (' '|'\t') -> skip
     ;
