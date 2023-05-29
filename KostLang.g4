@@ -23,6 +23,8 @@ expr2: ID          #id
       | INT			#int
       | REAL			#real
       | '(' expr0 ')'		#par
+      | TOINT expr2		    #toint
+      | TOREAL expr2		#toreal
       | STRING          #string
       | TRUE            #true
       | FALSE           #false
@@ -56,6 +58,12 @@ REAL: '0'..'9'+'.''0'..'9'+
 INT: '0'..'9'+
     ;
 
+TOINT: '(int)'
+    ;
+
+TOREAL: '(real)'
+    ;
+
 ADD: '+'
     ;
 
@@ -71,5 +79,5 @@ DIV: '/'
 NEWLINE:	'\r'? '\n'
     ;
 
-WS:   (' '|'\t') -> skip
-;
+WS:   (' '|'\t')+ { skip(); }
+    ;

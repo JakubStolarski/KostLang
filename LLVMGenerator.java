@@ -38,9 +38,6 @@ class LLVMGenerator{
       reg++;
    }
 
-   static void declare(String id){
-      main_text += "%"+id+" = alloca i32\n";
-   }
 
    static void declare_i32(String id){
       main_text += "%"+id+" = alloca i32\n";
@@ -52,6 +49,41 @@ class LLVMGenerator{
 
    static void declare_string(String id){
       main_text += "%"+id+" = alloca i8*\n";
+   }
+
+   // TABLICE
+   // ccccc
+
+   static void declare_intarray(String id){
+      main_text += "%"+id+" = alloca [32 x i32]\n";
+   }
+
+   static void declare_doublearray(String id){
+      main_text += "%"+id+" = alloca [32 x double]\n";
+   }
+
+   static void push_intarray(String id, String value, int l){
+      main_text += "%"+reg+" = getelementptr inbounds [32 x i32], [32 x i32]* %"+id+", i64 0, i64 "+l+"\n";
+      main_text += "store i32 "+value+", i32* %"+reg+"\n";
+      reg++;
+   }
+
+   static void push_doublearray(String id, String value, int l){
+      main_text += "%"+reg+" = getelementptr inbounds [32 x double], [32 x double]* %"+id+", i64 0, i64 "+l+"\n";
+      main_text += "store double "+value+", double* %"+reg+"\n";
+      reg++;
+   }
+
+   static void get_intelement(String id, String l) {
+      main_text += "%"+reg+" = getelementptr inbounds [32 x i32], [32 x i32]* %"+id+", i64 0, i64 "+l+"\n";
+      reg++;
+      LLVMGenerator.load_i32(Integer.toString(reg-1));
+   }
+
+   static void get_doubleelement(String id, String l) {
+      main_text += "%"+reg+" = getelementptr inbounds [32 x double], [32 x double]* %"+id+", i64 0, i64 "+l+"\n";
+      reg++;
+      LLVMGenerator.load_double(Integer.toString(reg-1));
    }
 
    static void allocate_string(String id, int l){
@@ -85,10 +117,6 @@ class LLVMGenerator{
       str++;
    }
    
-   static void cons_string(String id, String constant, int length){
-      int l = length+1;
-
-    }
 
    static void load_i32(String id){
       main_text += "%"+reg+" = load i32, i32* %"+id+"\n";
@@ -137,6 +165,7 @@ class LLVMGenerator{
 
    static void sub_i32(String val1, String val2){
       main_text += "%"+reg+" = sub i32 "+val1+", "+val2+"\n";
+      reg++;
    }
 
       static void sub_double(String val1, String val2){
@@ -182,6 +211,7 @@ class LLVMGenerator{
       main_text += "%"+reg+" = call i32 @atoi(i8* "+in+")\n";
       reg++;      
    }
+
    
    static String generate(){
       String text = "";
