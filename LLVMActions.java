@@ -57,6 +57,15 @@ public class LLVMActions extends KostLangBaseListener {
     public void exitReal(KostLangParser.RealContext ctx) { 
          stack.push( new Value(ctx.REAL().getText(), VarType.REAL, 0) );       
     } 
+
+    @Override 
+    public void exitId(KostLangParser.IdContext ctx) { 
+        String ID = ctx.ID().getText();
+        if (variables.containsKey(ID)) {
+            stack.push( new Value(variables.get(ID).name, VarType.INT, 0) ); 
+        }            
+    } 
+	
     @Override 
     public void exitString(KostLangParser.StringContext ctx) { 
         String tmp = ctx.STRING().getText(); 
