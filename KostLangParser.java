@@ -16,14 +16,15 @@ public class KostLangParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		T__0=1, T__1=2, T__2=3, PRINT=4, WRITE=5, READ=6, TRUE=7, FALSE=8, STRING=9, 
-		ID=10, REAL=11, INT=12, TOINT=13, TOREAL=14, ADD=15, SUB=16, MULT=17, 
-		DIV=18, NEWLINE=19, WS=20;
+		T__0=1, T__1=2, T__2=3, PRINT=4, WRITE=5, READ=6, TRUE=7, FALSE=8, AND=9, 
+		OR=10, XOR=11, NEG=12, SIZEOF=13, STRING=14, ID=15, REAL=16, INT=17, ADD=18, 
+		SUB=19, MULT=20, DIV=21, NEWLINE=22, WS=23;
 	public static final int
-		RULE_prog = 0, RULE_stat = 1, RULE_expr0 = 2, RULE_expr1 = 3, RULE_expr2 = 4;
+		RULE_prog = 0, RULE_stat = 1, RULE_expr0 = 2, RULE_expr1 = 3, RULE_expr2 = 4, 
+		RULE_bool = 5;
 	private static String[] makeRuleNames() {
 		return new String[] {
-			"prog", "stat", "expr0", "expr1", "expr2"
+			"prog", "stat", "expr0", "expr1", "expr2", "bool"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
@@ -31,16 +32,16 @@ public class KostLangParser extends Parser {
 	private static String[] makeLiteralNames() {
 		return new String[] {
 			null, "'='", "'('", "')'", "'print'", "'write'", "'read'", "'true'", 
-			"'false'", null, null, null, null, "'(int)'", "'(real)'", "'+'", "'-'", 
-			"'*'", "'/'"
+			"'false'", "'and'", "'or'", "'xor'", "'!'", "'sizeof'", null, null, null, 
+			null, "'+'", "'-'", "'*'", "'/'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
-			null, null, null, null, "PRINT", "WRITE", "READ", "TRUE", "FALSE", "STRING", 
-			"ID", "REAL", "INT", "TOINT", "TOREAL", "ADD", "SUB", "MULT", "DIV", 
-			"NEWLINE", "WS"
+			null, null, null, null, "PRINT", "WRITE", "READ", "TRUE", "FALSE", "AND", 
+			"OR", "XOR", "NEG", "SIZEOF", "STRING", "ID", "REAL", "INT", "ADD", "SUB", 
+			"MULT", "DIV", "NEWLINE", "WS"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -127,27 +128,27 @@ public class KostLangParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(16);
+			setState(18);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 525424L) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 4227184L) != 0)) {
 				{
 				{
-				setState(11);
+				setState(13);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 1136L) != 0)) {
+				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 32880L) != 0)) {
 					{
-					setState(10);
+					setState(12);
 					stat();
 					}
 				}
 
-				setState(13);
+				setState(15);
 				match(NEWLINE);
 				}
 				}
-				setState(18);
+				setState(20);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -239,18 +240,18 @@ public class KostLangParser extends Parser {
 		StatContext _localctx = new StatContext(_ctx, getState());
 		enterRule(_localctx, 2, RULE_stat);
 		try {
-			setState(28);
+			setState(30);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case ID:
 				_localctx = new AssignContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(19);
-				match(ID);
-				setState(20);
-				match(T__0);
 				setState(21);
+				match(ID);
+				setState(22);
+				match(T__0);
+				setState(23);
 				expr0();
 				}
 				break;
@@ -258,9 +259,9 @@ public class KostLangParser extends Parser {
 				_localctx = new PrintContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(22);
+				setState(24);
 				match(PRINT);
-				setState(23);
+				setState(25);
 				match(ID);
 				}
 				break;
@@ -268,9 +269,9 @@ public class KostLangParser extends Parser {
 				_localctx = new ReadContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(24);
+				setState(26);
 				match(READ);
-				setState(25);
+				setState(27);
 				match(ID);
 				}
 				break;
@@ -278,9 +279,9 @@ public class KostLangParser extends Parser {
 				_localctx = new WriteContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(26);
+				setState(28);
 				match(WRITE);
-				setState(27);
+				setState(29);
 				match(ID);
 				}
 				break;
@@ -364,19 +365,107 @@ public class KostLangParser extends Parser {
 			if ( listener instanceof KostLangListener ) ((KostLangListener)listener).exitSub(this);
 		}
 	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class NegContext extends Expr0Context {
+		public TerminalNode NEG() { return getToken(KostLangParser.NEG, 0); }
+		public BoolContext bool() {
+			return getRuleContext(BoolContext.class,0);
+		}
+		public NegContext(Expr0Context ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof KostLangListener ) ((KostLangListener)listener).enterNeg(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof KostLangListener ) ((KostLangListener)listener).exitNeg(this);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class OrContext extends Expr0Context {
+		public List<BoolContext> bool() {
+			return getRuleContexts(BoolContext.class);
+		}
+		public BoolContext bool(int i) {
+			return getRuleContext(BoolContext.class,i);
+		}
+		public TerminalNode OR() { return getToken(KostLangParser.OR, 0); }
+		public OrContext(Expr0Context ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof KostLangListener ) ((KostLangListener)listener).enterOr(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof KostLangListener ) ((KostLangListener)listener).exitOr(this);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class AndContext extends Expr0Context {
+		public List<BoolContext> bool() {
+			return getRuleContexts(BoolContext.class);
+		}
+		public BoolContext bool(int i) {
+			return getRuleContext(BoolContext.class,i);
+		}
+		public TerminalNode AND() { return getToken(KostLangParser.AND, 0); }
+		public AndContext(Expr0Context ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof KostLangListener ) ((KostLangListener)listener).enterAnd(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof KostLangListener ) ((KostLangListener)listener).exitAnd(this);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class XorContext extends Expr0Context {
+		public List<BoolContext> bool() {
+			return getRuleContexts(BoolContext.class);
+		}
+		public BoolContext bool(int i) {
+			return getRuleContext(BoolContext.class,i);
+		}
+		public TerminalNode XOR() { return getToken(KostLangParser.XOR, 0); }
+		public XorContext(Expr0Context ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof KostLangListener ) ((KostLangListener)listener).enterXor(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof KostLangListener ) ((KostLangListener)listener).exitXor(this);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class LogicalContext extends Expr0Context {
+		public BoolContext bool() {
+			return getRuleContext(BoolContext.class,0);
+		}
+		public LogicalContext(Expr0Context ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof KostLangListener ) ((KostLangListener)listener).enterLogical(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof KostLangListener ) ((KostLangListener)listener).exitLogical(this);
+		}
+	}
 
 	public final Expr0Context expr0() throws RecognitionException {
 		Expr0Context _localctx = new Expr0Context(_ctx, getState());
 		enterRule(_localctx, 4, RULE_expr0);
 		try {
-			setState(39);
+			setState(56);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,3,_ctx) ) {
 			case 1:
 				_localctx = new Single0Context(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(30);
+				setState(32);
 				expr1();
 				}
 				break;
@@ -384,11 +473,11 @@ public class KostLangParser extends Parser {
 				_localctx = new AddContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(31);
-				expr1();
-				setState(32);
-				match(ADD);
 				setState(33);
+				expr1();
+				setState(34);
+				match(ADD);
+				setState(35);
 				expr1();
 				}
 				break;
@@ -396,12 +485,66 @@ public class KostLangParser extends Parser {
 				_localctx = new SubContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(35);
-				expr1();
-				setState(36);
-				match(SUB);
 				setState(37);
 				expr1();
+				setState(38);
+				match(SUB);
+				setState(39);
+				expr1();
+				}
+				break;
+			case 4:
+				_localctx = new LogicalContext(_localctx);
+				enterOuterAlt(_localctx, 4);
+				{
+				setState(41);
+				bool();
+				}
+				break;
+			case 5:
+				_localctx = new AndContext(_localctx);
+				enterOuterAlt(_localctx, 5);
+				{
+				setState(42);
+				bool();
+				setState(43);
+				match(AND);
+				setState(44);
+				bool();
+				}
+				break;
+			case 6:
+				_localctx = new OrContext(_localctx);
+				enterOuterAlt(_localctx, 6);
+				{
+				setState(46);
+				bool();
+				setState(47);
+				match(OR);
+				setState(48);
+				bool();
+				}
+				break;
+			case 7:
+				_localctx = new XorContext(_localctx);
+				enterOuterAlt(_localctx, 7);
+				{
+				setState(50);
+				bool();
+				setState(51);
+				match(XOR);
+				setState(52);
+				bool();
+				}
+				break;
+			case 8:
+				_localctx = new NegContext(_localctx);
+				enterOuterAlt(_localctx, 8);
+				{
+				setState(54);
+				match(NEG);
+				setState(55);
+				bool();
 				}
 				break;
 			}
@@ -482,19 +625,35 @@ public class KostLangParser extends Parser {
 			if ( listener instanceof KostLangListener ) ((KostLangListener)listener).exitMult(this);
 		}
 	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class SizeContext extends Expr1Context {
+		public TerminalNode SIZEOF() { return getToken(KostLangParser.SIZEOF, 0); }
+		public Expr2Context expr2() {
+			return getRuleContext(Expr2Context.class,0);
+		}
+		public SizeContext(Expr1Context ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof KostLangListener ) ((KostLangListener)listener).enterSize(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof KostLangListener ) ((KostLangListener)listener).exitSize(this);
+		}
+	}
 
 	public final Expr1Context expr1() throws RecognitionException {
 		Expr1Context _localctx = new Expr1Context(_ctx, getState());
 		enterRule(_localctx, 6, RULE_expr1);
 		try {
-			setState(50);
+			setState(69);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,4,_ctx) ) {
 			case 1:
 				_localctx = new Single1Context(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(41);
+				setState(58);
 				expr2();
 				}
 				break;
@@ -502,11 +661,11 @@ public class KostLangParser extends Parser {
 				_localctx = new MultContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(42);
+				setState(59);
 				expr2();
-				setState(43);
+				setState(60);
 				match(MULT);
-				setState(44);
+				setState(61);
 				expr2();
 				}
 				break;
@@ -514,11 +673,21 @@ public class KostLangParser extends Parser {
 				_localctx = new DivContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(46);
+				setState(63);
 				expr2();
-				setState(47);
+				setState(64);
 				match(DIV);
-				setState(48);
+				setState(65);
+				expr2();
+				}
+				break;
+			case 4:
+				_localctx = new SizeContext(_localctx);
+				enterOuterAlt(_localctx, 4);
+				{
+				setState(67);
+				match(SIZEOF);
+				setState(68);
 				expr2();
 				}
 				break;
@@ -563,22 +732,6 @@ public class KostLangParser extends Parser {
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
-	public static class TointContext extends Expr2Context {
-		public TerminalNode TOINT() { return getToken(KostLangParser.TOINT, 0); }
-		public Expr2Context expr2() {
-			return getRuleContext(Expr2Context.class,0);
-		}
-		public TointContext(Expr2Context ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof KostLangListener ) ((KostLangListener)listener).enterToint(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof KostLangListener ) ((KostLangListener)listener).exitToint(this);
-		}
-	}
-	@SuppressWarnings("CheckReturnValue")
 	public static class StringContext extends Expr2Context {
 		public TerminalNode STRING() { return getToken(KostLangParser.STRING, 0); }
 		public StringContext(Expr2Context ctx) { copyFrom(ctx); }
@@ -589,48 +742,6 @@ public class KostLangParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof KostLangListener ) ((KostLangListener)listener).exitString(this);
-		}
-	}
-	@SuppressWarnings("CheckReturnValue")
-	public static class TrueContext extends Expr2Context {
-		public TerminalNode TRUE() { return getToken(KostLangParser.TRUE, 0); }
-		public TrueContext(Expr2Context ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof KostLangListener ) ((KostLangListener)listener).enterTrue(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof KostLangListener ) ((KostLangListener)listener).exitTrue(this);
-		}
-	}
-	@SuppressWarnings("CheckReturnValue")
-	public static class FalseContext extends Expr2Context {
-		public TerminalNode FALSE() { return getToken(KostLangParser.FALSE, 0); }
-		public FalseContext(Expr2Context ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof KostLangListener ) ((KostLangListener)listener).enterFalse(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof KostLangListener ) ((KostLangListener)listener).exitFalse(this);
-		}
-	}
-	@SuppressWarnings("CheckReturnValue")
-	public static class TorealContext extends Expr2Context {
-		public TerminalNode TOREAL() { return getToken(KostLangParser.TOREAL, 0); }
-		public Expr2Context expr2() {
-			return getRuleContext(Expr2Context.class,0);
-		}
-		public TorealContext(Expr2Context ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof KostLangListener ) ((KostLangListener)listener).enterToreal(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof KostLangListener ) ((KostLangListener)listener).exitToreal(this);
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
@@ -677,14 +788,14 @@ public class KostLangParser extends Parser {
 		Expr2Context _localctx = new Expr2Context(_ctx, getState());
 		enterRule(_localctx, 8, RULE_expr2);
 		try {
-			setState(66);
+			setState(79);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case ID:
 				_localctx = new IdContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(52);
+				setState(71);
 				match(ID);
 				}
 				break;
@@ -692,7 +803,7 @@ public class KostLangParser extends Parser {
 				_localctx = new IntContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(53);
+				setState(72);
 				match(INT);
 				}
 				break;
@@ -700,7 +811,7 @@ public class KostLangParser extends Parser {
 				_localctx = new RealContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(54);
+				setState(73);
 				match(REAL);
 				}
 				break;
@@ -708,55 +819,96 @@ public class KostLangParser extends Parser {
 				_localctx = new ParContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(55);
+				setState(74);
 				match(T__1);
-				setState(56);
+				setState(75);
 				expr0();
-				setState(57);
+				setState(76);
 				match(T__2);
-				}
-				break;
-			case TOINT:
-				_localctx = new TointContext(_localctx);
-				enterOuterAlt(_localctx, 5);
-				{
-				setState(59);
-				match(TOINT);
-				setState(60);
-				expr2();
-				}
-				break;
-			case TOREAL:
-				_localctx = new TorealContext(_localctx);
-				enterOuterAlt(_localctx, 6);
-				{
-				setState(61);
-				match(TOREAL);
-				setState(62);
-				expr2();
 				}
 				break;
 			case STRING:
 				_localctx = new StringContext(_localctx);
-				enterOuterAlt(_localctx, 7);
+				enterOuterAlt(_localctx, 5);
 				{
-				setState(63);
+				setState(78);
 				match(STRING);
 				}
 				break;
+			default:
+				throw new NoViableAltException(this);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class BoolContext extends ParserRuleContext {
+		public BoolContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_bool; }
+	 
+		public BoolContext() { }
+		public void copyFrom(BoolContext ctx) {
+			super.copyFrom(ctx);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class TrueContext extends BoolContext {
+		public TerminalNode TRUE() { return getToken(KostLangParser.TRUE, 0); }
+		public TrueContext(BoolContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof KostLangListener ) ((KostLangListener)listener).enterTrue(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof KostLangListener ) ((KostLangListener)listener).exitTrue(this);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class FalseContext extends BoolContext {
+		public TerminalNode FALSE() { return getToken(KostLangParser.FALSE, 0); }
+		public FalseContext(BoolContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof KostLangListener ) ((KostLangListener)listener).enterFalse(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof KostLangListener ) ((KostLangListener)listener).exitFalse(this);
+		}
+	}
+
+	public final BoolContext bool() throws RecognitionException {
+		BoolContext _localctx = new BoolContext(_ctx, getState());
+		enterRule(_localctx, 10, RULE_bool);
+		try {
+			setState(83);
+			_errHandler.sync(this);
+			switch (_input.LA(1)) {
 			case TRUE:
 				_localctx = new TrueContext(_localctx);
-				enterOuterAlt(_localctx, 8);
+				enterOuterAlt(_localctx, 1);
 				{
-				setState(64);
+				setState(81);
 				match(TRUE);
 				}
 				break;
 			case FALSE:
 				_localctx = new FalseContext(_localctx);
-				enterOuterAlt(_localctx, 9);
+				enterOuterAlt(_localctx, 2);
 				{
-				setState(65);
+				setState(82);
 				match(FALSE);
 				}
 				break;
@@ -776,51 +928,61 @@ public class KostLangParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\u0004\u0001\u0014E\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
-		"\u0002\u0007\u0002\u0002\u0003\u0007\u0003\u0002\u0004\u0007\u0004\u0001"+
-		"\u0000\u0003\u0000\f\b\u0000\u0001\u0000\u0005\u0000\u000f\b\u0000\n\u0000"+
-		"\f\u0000\u0012\t\u0000\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001"+
-		"\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0003\u0001"+
-		"\u001d\b\u0001\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0002"+
-		"\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0003\u0002(\b\u0002"+
+		"\u0004\u0001\u0017V\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
+		"\u0002\u0007\u0002\u0002\u0003\u0007\u0003\u0002\u0004\u0007\u0004\u0002"+
+		"\u0005\u0007\u0005\u0001\u0000\u0003\u0000\u000e\b\u0000\u0001\u0000\u0005"+
+		"\u0000\u0011\b\u0000\n\u0000\f\u0000\u0014\t\u0000\u0001\u0001\u0001\u0001"+
+		"\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001"+
+		"\u0001\u0001\u0003\u0001\u001f\b\u0001\u0001\u0002\u0001\u0002\u0001\u0002"+
+		"\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0002"+
+		"\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0002"+
+		"\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0002"+
+		"\u0001\u0002\u0001\u0002\u0001\u0002\u0003\u00029\b\u0002\u0001\u0003"+
 		"\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003"+
-		"\u0001\u0003\u0001\u0003\u0001\u0003\u0003\u00033\b\u0003\u0001\u0004"+
+		"\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0003\u0003F\b\u0003"+
 		"\u0001\u0004\u0001\u0004\u0001\u0004\u0001\u0004\u0001\u0004\u0001\u0004"+
-		"\u0001\u0004\u0001\u0004\u0001\u0004\u0001\u0004\u0001\u0004\u0001\u0004"+
-		"\u0001\u0004\u0003\u0004C\b\u0004\u0001\u0004\u0000\u0000\u0005\u0000"+
-		"\u0002\u0004\u0006\b\u0000\u0000P\u0000\u0010\u0001\u0000\u0000\u0000"+
-		"\u0002\u001c\u0001\u0000\u0000\u0000\u0004\'\u0001\u0000\u0000\u0000\u0006"+
-		"2\u0001\u0000\u0000\u0000\bB\u0001\u0000\u0000\u0000\n\f\u0003\u0002\u0001"+
-		"\u0000\u000b\n\u0001\u0000\u0000\u0000\u000b\f\u0001\u0000\u0000\u0000"+
-		"\f\r\u0001\u0000\u0000\u0000\r\u000f\u0005\u0013\u0000\u0000\u000e\u000b"+
-		"\u0001\u0000\u0000\u0000\u000f\u0012\u0001\u0000\u0000\u0000\u0010\u000e"+
-		"\u0001\u0000\u0000\u0000\u0010\u0011\u0001\u0000\u0000\u0000\u0011\u0001"+
-		"\u0001\u0000\u0000\u0000\u0012\u0010\u0001\u0000\u0000\u0000\u0013\u0014"+
-		"\u0005\n\u0000\u0000\u0014\u0015\u0005\u0001\u0000\u0000\u0015\u001d\u0003"+
-		"\u0004\u0002\u0000\u0016\u0017\u0005\u0004\u0000\u0000\u0017\u001d\u0005"+
-		"\n\u0000\u0000\u0018\u0019\u0005\u0006\u0000\u0000\u0019\u001d\u0005\n"+
-		"\u0000\u0000\u001a\u001b\u0005\u0005\u0000\u0000\u001b\u001d\u0005\n\u0000"+
-		"\u0000\u001c\u0013\u0001\u0000\u0000\u0000\u001c\u0016\u0001\u0000\u0000"+
-		"\u0000\u001c\u0018\u0001\u0000\u0000\u0000\u001c\u001a\u0001\u0000\u0000"+
-		"\u0000\u001d\u0003\u0001\u0000\u0000\u0000\u001e(\u0003\u0006\u0003\u0000"+
-		"\u001f \u0003\u0006\u0003\u0000 !\u0005\u000f\u0000\u0000!\"\u0003\u0006"+
-		"\u0003\u0000\"(\u0001\u0000\u0000\u0000#$\u0003\u0006\u0003\u0000$%\u0005"+
-		"\u0010\u0000\u0000%&\u0003\u0006\u0003\u0000&(\u0001\u0000\u0000\u0000"+
-		"\'\u001e\u0001\u0000\u0000\u0000\'\u001f\u0001\u0000\u0000\u0000\'#\u0001"+
-		"\u0000\u0000\u0000(\u0005\u0001\u0000\u0000\u0000)3\u0003\b\u0004\u0000"+
-		"*+\u0003\b\u0004\u0000+,\u0005\u0011\u0000\u0000,-\u0003\b\u0004\u0000"+
-		"-3\u0001\u0000\u0000\u0000./\u0003\b\u0004\u0000/0\u0005\u0012\u0000\u0000"+
-		"01\u0003\b\u0004\u000013\u0001\u0000\u0000\u00002)\u0001\u0000\u0000\u0000"+
-		"2*\u0001\u0000\u0000\u00002.\u0001\u0000\u0000\u00003\u0007\u0001\u0000"+
-		"\u0000\u00004C\u0005\n\u0000\u00005C\u0005\f\u0000\u00006C\u0005\u000b"+
-		"\u0000\u000078\u0005\u0002\u0000\u000089\u0003\u0004\u0002\u00009:\u0005"+
-		"\u0003\u0000\u0000:C\u0001\u0000\u0000\u0000;<\u0005\r\u0000\u0000<C\u0003"+
-		"\b\u0004\u0000=>\u0005\u000e\u0000\u0000>C\u0003\b\u0004\u0000?C\u0005"+
-		"\t\u0000\u0000@C\u0005\u0007\u0000\u0000AC\u0005\b\u0000\u0000B4\u0001"+
-		"\u0000\u0000\u0000B5\u0001\u0000\u0000\u0000B6\u0001\u0000\u0000\u0000"+
-		"B7\u0001\u0000\u0000\u0000B;\u0001\u0000\u0000\u0000B=\u0001\u0000\u0000"+
-		"\u0000B?\u0001\u0000\u0000\u0000B@\u0001\u0000\u0000\u0000BA\u0001\u0000"+
-		"\u0000\u0000C\t\u0001\u0000\u0000\u0000\u0006\u000b\u0010\u001c\'2B";
+		"\u0001\u0004\u0001\u0004\u0003\u0004P\b\u0004\u0001\u0005\u0001\u0005"+
+		"\u0003\u0005T\b\u0005\u0001\u0005\u0000\u0000\u0006\u0000\u0002\u0004"+
+		"\u0006\b\n\u0000\u0000c\u0000\u0012\u0001\u0000\u0000\u0000\u0002\u001e"+
+		"\u0001\u0000\u0000\u0000\u00048\u0001\u0000\u0000\u0000\u0006E\u0001\u0000"+
+		"\u0000\u0000\bO\u0001\u0000\u0000\u0000\nS\u0001\u0000\u0000\u0000\f\u000e"+
+		"\u0003\u0002\u0001\u0000\r\f\u0001\u0000\u0000\u0000\r\u000e\u0001\u0000"+
+		"\u0000\u0000\u000e\u000f\u0001\u0000\u0000\u0000\u000f\u0011\u0005\u0016"+
+		"\u0000\u0000\u0010\r\u0001\u0000\u0000\u0000\u0011\u0014\u0001\u0000\u0000"+
+		"\u0000\u0012\u0010\u0001\u0000\u0000\u0000\u0012\u0013\u0001\u0000\u0000"+
+		"\u0000\u0013\u0001\u0001\u0000\u0000\u0000\u0014\u0012\u0001\u0000\u0000"+
+		"\u0000\u0015\u0016\u0005\u000f\u0000\u0000\u0016\u0017\u0005\u0001\u0000"+
+		"\u0000\u0017\u001f\u0003\u0004\u0002\u0000\u0018\u0019\u0005\u0004\u0000"+
+		"\u0000\u0019\u001f\u0005\u000f\u0000\u0000\u001a\u001b\u0005\u0006\u0000"+
+		"\u0000\u001b\u001f\u0005\u000f\u0000\u0000\u001c\u001d\u0005\u0005\u0000"+
+		"\u0000\u001d\u001f\u0005\u000f\u0000\u0000\u001e\u0015\u0001\u0000\u0000"+
+		"\u0000\u001e\u0018\u0001\u0000\u0000\u0000\u001e\u001a\u0001\u0000\u0000"+
+		"\u0000\u001e\u001c\u0001\u0000\u0000\u0000\u001f\u0003\u0001\u0000\u0000"+
+		"\u0000 9\u0003\u0006\u0003\u0000!\"\u0003\u0006\u0003\u0000\"#\u0005\u0012"+
+		"\u0000\u0000#$\u0003\u0006\u0003\u0000$9\u0001\u0000\u0000\u0000%&\u0003"+
+		"\u0006\u0003\u0000&\'\u0005\u0013\u0000\u0000\'(\u0003\u0006\u0003\u0000"+
+		"(9\u0001\u0000\u0000\u0000)9\u0003\n\u0005\u0000*+\u0003\n\u0005\u0000"+
+		"+,\u0005\t\u0000\u0000,-\u0003\n\u0005\u0000-9\u0001\u0000\u0000\u0000"+
+		"./\u0003\n\u0005\u0000/0\u0005\n\u0000\u000001\u0003\n\u0005\u000019\u0001"+
+		"\u0000\u0000\u000023\u0003\n\u0005\u000034\u0005\u000b\u0000\u000045\u0003"+
+		"\n\u0005\u000059\u0001\u0000\u0000\u000067\u0005\f\u0000\u000079\u0003"+
+		"\n\u0005\u00008 \u0001\u0000\u0000\u00008!\u0001\u0000\u0000\u00008%\u0001"+
+		"\u0000\u0000\u00008)\u0001\u0000\u0000\u00008*\u0001\u0000\u0000\u0000"+
+		"8.\u0001\u0000\u0000\u000082\u0001\u0000\u0000\u000086\u0001\u0000\u0000"+
+		"\u00009\u0005\u0001\u0000\u0000\u0000:F\u0003\b\u0004\u0000;<\u0003\b"+
+		"\u0004\u0000<=\u0005\u0014\u0000\u0000=>\u0003\b\u0004\u0000>F\u0001\u0000"+
+		"\u0000\u0000?@\u0003\b\u0004\u0000@A\u0005\u0015\u0000\u0000AB\u0003\b"+
+		"\u0004\u0000BF\u0001\u0000\u0000\u0000CD\u0005\r\u0000\u0000DF\u0003\b"+
+		"\u0004\u0000E:\u0001\u0000\u0000\u0000E;\u0001\u0000\u0000\u0000E?\u0001"+
+		"\u0000\u0000\u0000EC\u0001\u0000\u0000\u0000F\u0007\u0001\u0000\u0000"+
+		"\u0000GP\u0005\u000f\u0000\u0000HP\u0005\u0011\u0000\u0000IP\u0005\u0010"+
+		"\u0000\u0000JK\u0005\u0002\u0000\u0000KL\u0003\u0004\u0002\u0000LM\u0005"+
+		"\u0003\u0000\u0000MP\u0001\u0000\u0000\u0000NP\u0005\u000e\u0000\u0000"+
+		"OG\u0001\u0000\u0000\u0000OH\u0001\u0000\u0000\u0000OI\u0001\u0000\u0000"+
+		"\u0000OJ\u0001\u0000\u0000\u0000ON\u0001\u0000\u0000\u0000P\t\u0001\u0000"+
+		"\u0000\u0000QT\u0005\u0007\u0000\u0000RT\u0005\b\u0000\u0000SQ\u0001\u0000"+
+		"\u0000\u0000SR\u0001\u0000\u0000\u0000T\u000b\u0001\u0000\u0000\u0000"+
+		"\u0007\r\u0012\u001e8EOS";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {
