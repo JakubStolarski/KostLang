@@ -12,11 +12,17 @@ stat:	 ID '=' expr0		#assign
 expr0:  expr1			#single0
       | expr1 ADD expr1	#add 
       | expr1 SUB expr1 #sub
+      | bool            #logical
+      | bool AND bool   #and
+      | bool OR bool    #or
+      | bool XOR bool   #xor 
+      | NEG bool        #neg
 ;
 
 expr1:  expr2			#single1
       | expr2 MULT expr2	#mult
-      | expr2 DIV expr2     #div 
+      | expr2 DIV expr2     #div
+      | SIZEOF expr2        #size 
 ;
 
 expr2: ID          #id     
@@ -24,10 +30,11 @@ expr2: ID          #id
       | REAL			#real
       | '(' expr0 ')'		#par
       | STRING          #string
-      | TRUE            #true
-      | FALSE           #false
 ;
 
+bool: TRUE      #true
+    |FALSE      #false
+;
 
 PRINT:	'print' 
     ;
@@ -42,6 +49,21 @@ TRUE: 'true'
 ;
 
 FALSE: 'false'
+;
+
+AND: 'and'
+;
+
+OR: 'or'
+;
+
+XOR: 'xor'
+;
+
+NEG: '!'
+;
+
+SIZEOF: 'sizeof'
 ;
 
 STRING :  '"' ( ~('\\'|'"') )* '"'

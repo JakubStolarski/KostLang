@@ -1,0 +1,17 @@
+a = 1.1 + 1.2
+b = sizeof "yo"
+c = true
+d = true and false
+e = !true
+f = true xor false
+ga = "abc"
+gb = "def"
+g = "abc" + "abc"
+
+print a
+print b
+print c
+print d
+print e
+print f
+print g

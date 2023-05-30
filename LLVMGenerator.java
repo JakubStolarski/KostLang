@@ -20,6 +20,13 @@ class LLVMGenerator{
       reg++;
    }
 
+   static void printf_bool(String id){
+      main_text += "%"+reg+" = load i8, i8* %"+id+"\n";
+      reg++;
+      main_text += "%"+reg+" = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @strpi, i32 0, i32 0), i8 %"+(reg-1)+")\n";
+      reg++;
+   }
+
       static void printf_double(String id){
       main_text += "%"+reg+" = load double, double* %"+id+"\n";
       reg++;
@@ -50,6 +57,10 @@ class LLVMGenerator{
       main_text += "%"+id+" = alloca double\n";
    }
 
+   static void declare_bool(String id){
+      main_text += "%"+id+" = alloca i8\n";
+   }
+
    static void declare_string(String id){
       main_text += "%"+id+" = alloca i8*\n";
    }
@@ -70,6 +81,10 @@ class LLVMGenerator{
       main_text += "store i8* %"+(reg-1)+", i8** %"+id+"\n";
    }
 
+   static void assign_bool(String id, String value){  
+      main_text += "store i8 "+value+", i8* %"+id+"\n";
+   }
+
    static void constant_string(String content){
       int l = content.length()+1;     
       header_text += "@str"+str+" = constant ["+l+" x i8] c\""+content+"\\00\"\n";
@@ -85,11 +100,6 @@ class LLVMGenerator{
       str++;
    }
    
-   static void cons_string(String id, String constant, int length){
-      int l = length+1;
-
-    }
-
    static void load_i32(String id){
       main_text += "%"+reg+" = load i32, i32* %"+id+"\n";
       reg++;
@@ -102,11 +112,6 @@ class LLVMGenerator{
 
    static void load_string(String id){
       main_text += "%"+reg+" = load i8*, i8** %"+id+"\n";
-      reg++;
-   }
-
-   static void string_pointer(String id, int l){
-      main_text += "%"+reg+" = getelementptr inbounds ["+(l+1)+" x i8], ["+(l+1)+" x i8]* %"+id+", i64 0, i64 0\n";
       reg++;
    }
 
@@ -195,7 +200,7 @@ class LLVMGenerator{
       text += "@strps = constant [4 x i8] c\"%s\\0A\\00\"\n";
       text += "@strpi = constant [4 x i8] c\"%d\\0A\\00\"\n";
       text += "@strpd = constant [4 x i8] c\"%f\\0A\\00\"\n";
-      text += "@strs = constant [5 x i8] c\"%d\\00\"\n";
+      text += "@strs = constant [5 x i8] c\"%10s\\00\"\n";
       text += "@strspi = constant [3 x i8] c\"%d\\00\"\n";
       text += header_text;
       text += "define i32 @main() nounwind{\n";
