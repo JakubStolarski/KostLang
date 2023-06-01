@@ -130,18 +130,23 @@ class LLVMGenerator{
       main_text += "%ptrstr"+str+" = alloca i8*\n";
       main_text += "%"+reg+" = getelementptr inbounds ["+(l1+l2+1)+" x i8], ["+(l1+l2+1)+" x i8]* %str"+str+", i64 0, i64 0\n";
       reg++;
-      main_text += "store i8* %"+(reg-1)+", i8** %ptrstr"+str+"\n"; 
+      main_text += "store i8* %"+(reg-1)+", i8** %ptrstr"+str+"\n";
+      main_text += "%"+reg+" = load i8*, i8** %"+id1+"\n";
+      reg++;
+      main_text += "%"+reg+" = load i8*, i8** %"+id2+"\n";
+      reg++; 
       main_text += "%"+reg+" = load i8*, i8** %ptrstr"+str+"\n";
       reg++;  
-      main_text += "%"+reg+" = call i8* @strcpy(i8* %"+(reg-1)+", i8* %"+(reg-6)+")\n";
+      main_text += "%"+reg+" = call i8* @strcpy(i8* %"+(reg-1)+", i8* %"+(reg-3)+")\n";
       reg++;
-      main_text += "%"+reg+" = call i8* @strcat(i8* %"+(reg-1)+", i8* %"+(reg-5)+")\n";
+      main_text += "%"+reg+" = call i8* @strcat(i8* %"+(reg-1)+", i8* %"+(reg-3)+")\n";
       reg++;
       str++;      
    }
 
    static void sub_i32(String val1, String val2){
       main_text += "%"+reg+" = sub i32 "+val1+", "+val2+"\n";
+      reg++;
    }
 
       static void sub_double(String val1, String val2){

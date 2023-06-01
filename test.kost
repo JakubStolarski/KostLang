@@ -1,12 +1,15 @@
-a = 1.1 + 1.2
-b = sizeof "yo"
-c = true
-d = true and false
-e = !true
-f = true xor false
-ga = "abc"
-gb = "def"
-g = "abc" + "abc"
+a = 1 + 2
+b = 2.1 * 3.2
+c = 4.5 - 1.5
+d = 8 / 6
+e = "Hello"
+f = " World!"
+ef = e + f
+g = sizeof ef
+h = true
+i = true and !false
+j = false or true
+k = true xor true
 
 print a
 print b
@@ -14,4 +17,11 @@ print c
 print d
 print e
 print f
+print ef
 print g
+print h
+print i
+print j
+print k
+
+
