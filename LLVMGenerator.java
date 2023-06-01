@@ -133,9 +133,9 @@ class LLVMGenerator{
       main_text += "store i8* %"+(reg-1)+", i8** %ptrstr"+str+"\n"; 
       main_text += "%"+reg+" = load i8*, i8** %ptrstr"+str+"\n";
       reg++;  
-      main_text += "%"+reg+" = call i8* @strcpy(i8* %"+(reg-1)+", i8* "+id1+")\n";
+      main_text += "%"+reg+" = call i8* @strcpy(i8* %"+(reg-1)+", i8* %"+(reg-6)+")\n";
       reg++;
-      main_text += "%"+reg+" = call i8* @strcat(i8* %"+(reg-2)+", i8* "+id2+")\n";
+      main_text += "%"+reg+" = call i8* @strcat(i8* %"+(reg-1)+", i8* %"+(reg-5)+")\n";
       reg++;
       str++;      
    }
@@ -169,39 +169,17 @@ class LLVMGenerator{
       reg++;
    }
 
-   static void int_to_string(String in, int lout){
-      allocate_string("str"+str, lout);
-      main_text += "%ptrstr"+str+" = alloca i8*\n";
-      main_text += "%"+reg+" = getelementptr inbounds ["+(lout+1)+" x i8], ["+(lout+1)+" x i8]* %str"+str+", i64 0, i64 0\n";
-      reg++;
-      main_text += "store i8* %"+(reg-1)+", i8** %ptrstr"+str+"\n"; 
-      main_text += "%"+reg+" = load i8*, i8** %ptrstr"+str+"\n";
-      reg++;
-      str++;  
-      main_text += "%"+reg+" = call i32 (i8*, i8*, ...) @sprintf(i8* %"+(reg-1)+", i8* getelementptr inbounds ([3 x i8], [3 x i8]* @strspi, i32 0, i32 0), i32 "+in+")\n";
-      reg++;
-   }
-
-   
-   static void string_to_int(String in){
-      main_text += "%"+reg+" = call i32 @atoi(i8* "+in+")\n";
-      reg++;      
-   }
-   
    static String generate(){
       String text = "";
       text += "declare i32 @printf(i8*, ...)\n";
-      text += "declare i32 @sprintf(i8*, i8*, ...)\n";
       text += "declare i8* @strcpy(i8*, i8*)\n";
       text += "declare i8* @strcat(i8*, i8*)\n";
-      text += "declare i32 @atoi(i8*)\n";
       text += "declare i32 @__isoc99_scanf(i8*, ...)\n";
       text += "declare void @llvm.memcpy.p0i8.p0i8.i64(i8* noalias nocapture writeonly, i8* noalias nocapture readonly, i64, i1 immarg)\n";
       text += "@strps = constant [4 x i8] c\"%s\\0A\\00\"\n";
       text += "@strpi = constant [4 x i8] c\"%d\\0A\\00\"\n";
       text += "@strpd = constant [4 x i8] c\"%f\\0A\\00\"\n";
       text += "@strs = constant [5 x i8] c\"%10s\\00\"\n";
-      text += "@strspi = constant [3 x i8] c\"%d\\00\"\n";
       text += header_text;
       text += "define i32 @main() nounwind{\n";
       text += main_text;
