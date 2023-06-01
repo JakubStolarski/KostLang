@@ -185,7 +185,7 @@ public class LLVMActions extends KostLangBaseListener {
       Value v1 = stack.pop();
       System.out.println(v1.name);
       System.out.println(v2.name);
-      if( v1.name == v2.name ) {
+      if( v1.name == "1" && v1.name == v2.name ) {
          System.out.println("Pcham 1!");
          stack.push(new Value(v1.name, VarType.BOOL, 0));
       }

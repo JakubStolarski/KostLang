@@ -12,11 +12,7 @@ stat:	 ID '=' expr0		#assign
 expr0:  expr1			#single0
       | expr1 ADD expr1	#add 
       | expr1 SUB expr1 #sub
-      | bool            #logical
-      | bool AND bool   #and
-      | bool OR bool    #or
-      | bool XOR bool   #xor 
-      | NEG bool        #neg
+      | expr3           #logicalop
 ;
 
 expr1:  expr2			#single1
@@ -30,6 +26,16 @@ expr2: ID          #id
       | REAL			#real
       | '(' expr0 ')'		#par
       | STRING          #string
+;
+
+expr3: expr4        #logicalelem
+      | expr4 AND expr4   #and
+      | expr4 OR expr4    #or
+      | expr4 XOR expr4   #xor 
+;
+
+expr4: bool     #logical
+      | NEG bool        #neg
 ;
 
 bool: TRUE      #true

@@ -101,65 +101,17 @@ public interface KostLangListener extends ParseTreeListener {
 	 */
 	void exitSub(KostLangParser.SubContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code logical}
+	 * Enter a parse tree produced by the {@code logicalop}
 	 * labeled alternative in {@link KostLangParser#expr0}.
 	 * @param ctx the parse tree
 	 */
-	void enterLogical(KostLangParser.LogicalContext ctx);
+	void enterLogicalop(KostLangParser.LogicalopContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code logical}
+	 * Exit a parse tree produced by the {@code logicalop}
 	 * labeled alternative in {@link KostLangParser#expr0}.
 	 * @param ctx the parse tree
 	 */
-	void exitLogical(KostLangParser.LogicalContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code and}
-	 * labeled alternative in {@link KostLangParser#expr0}.
-	 * @param ctx the parse tree
-	 */
-	void enterAnd(KostLangParser.AndContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code and}
-	 * labeled alternative in {@link KostLangParser#expr0}.
-	 * @param ctx the parse tree
-	 */
-	void exitAnd(KostLangParser.AndContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code or}
-	 * labeled alternative in {@link KostLangParser#expr0}.
-	 * @param ctx the parse tree
-	 */
-	void enterOr(KostLangParser.OrContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code or}
-	 * labeled alternative in {@link KostLangParser#expr0}.
-	 * @param ctx the parse tree
-	 */
-	void exitOr(KostLangParser.OrContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code xor}
-	 * labeled alternative in {@link KostLangParser#expr0}.
-	 * @param ctx the parse tree
-	 */
-	void enterXor(KostLangParser.XorContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code xor}
-	 * labeled alternative in {@link KostLangParser#expr0}.
-	 * @param ctx the parse tree
-	 */
-	void exitXor(KostLangParser.XorContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code neg}
-	 * labeled alternative in {@link KostLangParser#expr0}.
-	 * @param ctx the parse tree
-	 */
-	void enterNeg(KostLangParser.NegContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code neg}
-	 * labeled alternative in {@link KostLangParser#expr0}.
-	 * @param ctx the parse tree
-	 */
-	void exitNeg(KostLangParser.NegContext ctx);
+	void exitLogicalop(KostLangParser.LogicalopContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code single1}
 	 * labeled alternative in {@link KostLangParser#expr1}.
@@ -268,6 +220,78 @@ public interface KostLangListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitString(KostLangParser.StringContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code logicalelem}
+	 * labeled alternative in {@link KostLangParser#expr3}.
+	 * @param ctx the parse tree
+	 */
+	void enterLogicalelem(KostLangParser.LogicalelemContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code logicalelem}
+	 * labeled alternative in {@link KostLangParser#expr3}.
+	 * @param ctx the parse tree
+	 */
+	void exitLogicalelem(KostLangParser.LogicalelemContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code and}
+	 * labeled alternative in {@link KostLangParser#expr3}.
+	 * @param ctx the parse tree
+	 */
+	void enterAnd(KostLangParser.AndContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code and}
+	 * labeled alternative in {@link KostLangParser#expr3}.
+	 * @param ctx the parse tree
+	 */
+	void exitAnd(KostLangParser.AndContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code or}
+	 * labeled alternative in {@link KostLangParser#expr3}.
+	 * @param ctx the parse tree
+	 */
+	void enterOr(KostLangParser.OrContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code or}
+	 * labeled alternative in {@link KostLangParser#expr3}.
+	 * @param ctx the parse tree
+	 */
+	void exitOr(KostLangParser.OrContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code xor}
+	 * labeled alternative in {@link KostLangParser#expr3}.
+	 * @param ctx the parse tree
+	 */
+	void enterXor(KostLangParser.XorContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code xor}
+	 * labeled alternative in {@link KostLangParser#expr3}.
+	 * @param ctx the parse tree
+	 */
+	void exitXor(KostLangParser.XorContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code logical}
+	 * labeled alternative in {@link KostLangParser#expr4}.
+	 * @param ctx the parse tree
+	 */
+	void enterLogical(KostLangParser.LogicalContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code logical}
+	 * labeled alternative in {@link KostLangParser#expr4}.
+	 * @param ctx the parse tree
+	 */
+	void exitLogical(KostLangParser.LogicalContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code neg}
+	 * labeled alternative in {@link KostLangParser#expr4}.
+	 * @param ctx the parse tree
+	 */
+	void enterNeg(KostLangParser.NegContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code neg}
+	 * labeled alternative in {@link KostLangParser#expr4}.
+	 * @param ctx the parse tree
+	 */
+	void exitNeg(KostLangParser.NegContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code true}
 	 * labeled alternative in {@link KostLangParser#bool}.
