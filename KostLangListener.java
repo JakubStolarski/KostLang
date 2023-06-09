@@ -17,6 +17,16 @@ public interface KostLangListener extends ParseTreeListener {
 	 */
 	void exitProg(KostLangParser.ProgContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link KostLangParser#block}.
+	 * @param ctx the parse tree
+	 */
+	void enterBlock(KostLangParser.BlockContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link KostLangParser#block}.
+	 * @param ctx the parse tree
+	 */
+	void exitBlock(KostLangParser.BlockContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code assign}
 	 * labeled alternative in {@link KostLangParser#stat}.
 	 * @param ctx the parse tree
@@ -64,6 +74,196 @@ public interface KostLangListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitWrite(KostLangParser.WriteContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code if}
+	 * labeled alternative in {@link KostLangParser#stat}.
+	 * @param ctx the parse tree
+	 */
+	void enterIf(KostLangParser.IfContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code if}
+	 * labeled alternative in {@link KostLangParser#stat}.
+	 * @param ctx the parse tree
+	 */
+	void exitIf(KostLangParser.IfContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code while}
+	 * labeled alternative in {@link KostLangParser#stat}.
+	 * @param ctx the parse tree
+	 */
+	void enterWhile(KostLangParser.WhileContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code while}
+	 * labeled alternative in {@link KostLangParser#stat}.
+	 * @param ctx the parse tree
+	 */
+	void exitWhile(KostLangParser.WhileContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link KostLangParser#function}.
+	 * @param ctx the parse tree
+	 */
+	void enterFunction(KostLangParser.FunctionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link KostLangParser#function}.
+	 * @param ctx the parse tree
+	 */
+	void exitFunction(KostLangParser.FunctionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link KostLangParser#params}.
+	 * @param ctx the parse tree
+	 */
+	void enterParams(KostLangParser.ParamsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link KostLangParser#params}.
+	 * @param ctx the parse tree
+	 */
+	void exitParams(KostLangParser.ParamsContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code inttype}
+	 * labeled alternative in {@link KostLangParser#type}.
+	 * @param ctx the parse tree
+	 */
+	void enterInttype(KostLangParser.InttypeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code inttype}
+	 * labeled alternative in {@link KostLangParser#type}.
+	 * @param ctx the parse tree
+	 */
+	void exitInttype(KostLangParser.InttypeContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code floattype}
+	 * labeled alternative in {@link KostLangParser#type}.
+	 * @param ctx the parse tree
+	 */
+	void enterFloattype(KostLangParser.FloattypeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code floattype}
+	 * labeled alternative in {@link KostLangParser#type}.
+	 * @param ctx the parse tree
+	 */
+	void exitFloattype(KostLangParser.FloattypeContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code stringtype}
+	 * labeled alternative in {@link KostLangParser#type}.
+	 * @param ctx the parse tree
+	 */
+	void enterStringtype(KostLangParser.StringtypeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code stringtype}
+	 * labeled alternative in {@link KostLangParser#type}.
+	 * @param ctx the parse tree
+	 */
+	void exitStringtype(KostLangParser.StringtypeContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link KostLangParser#fblock}.
+	 * @param ctx the parse tree
+	 */
+	void enterFblock(KostLangParser.FblockContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link KostLangParser#fblock}.
+	 * @param ctx the parse tree
+	 */
+	void exitFblock(KostLangParser.FblockContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link KostLangParser#blockif}.
+	 * @param ctx the parse tree
+	 */
+	void enterBlockif(KostLangParser.BlockifContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link KostLangParser#blockif}.
+	 * @param ctx the parse tree
+	 */
+	void exitBlockif(KostLangParser.BlockifContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link KostLangParser#blockwhile}.
+	 * @param ctx the parse tree
+	 */
+	void enterBlockwhile(KostLangParser.BlockwhileContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link KostLangParser#blockwhile}.
+	 * @param ctx the parse tree
+	 */
+	void exitBlockwhile(KostLangParser.BlockwhileContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code equals}
+	 * labeled alternative in {@link KostLangParser#condition}.
+	 * @param ctx the parse tree
+	 */
+	void enterEquals(KostLangParser.EqualsContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code equals}
+	 * labeled alternative in {@link KostLangParser#condition}.
+	 * @param ctx the parse tree
+	 */
+	void exitEquals(KostLangParser.EqualsContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ge}
+	 * labeled alternative in {@link KostLangParser#condition}.
+	 * @param ctx the parse tree
+	 */
+	void enterGe(KostLangParser.GeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ge}
+	 * labeled alternative in {@link KostLangParser#condition}.
+	 * @param ctx the parse tree
+	 */
+	void exitGe(KostLangParser.GeContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code le}
+	 * labeled alternative in {@link KostLangParser#condition}.
+	 * @param ctx the parse tree
+	 */
+	void enterLe(KostLangParser.LeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code le}
+	 * labeled alternative in {@link KostLangParser#condition}.
+	 * @param ctx the parse tree
+	 */
+	void exitLe(KostLangParser.LeContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code great}
+	 * labeled alternative in {@link KostLangParser#condition}.
+	 * @param ctx the parse tree
+	 */
+	void enterGreat(KostLangParser.GreatContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code great}
+	 * labeled alternative in {@link KostLangParser#condition}.
+	 * @param ctx the parse tree
+	 */
+	void exitGreat(KostLangParser.GreatContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code less}
+	 * labeled alternative in {@link KostLangParser#condition}.
+	 * @param ctx the parse tree
+	 */
+	void enterLess(KostLangParser.LessContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code less}
+	 * labeled alternative in {@link KostLangParser#condition}.
+	 * @param ctx the parse tree
+	 */
+	void exitLess(KostLangParser.LessContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link KostLangParser#conditionwhile}.
+	 * @param ctx the parse tree
+	 */
+	void enterConditionwhile(KostLangParser.ConditionwhileContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link KostLangParser#conditionwhile}.
+	 * @param ctx the parse tree
+	 */
+	void exitConditionwhile(KostLangParser.ConditionwhileContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link KostLangParser#elsestat}.
+	 * @param ctx the parse tree
+	 */
+	void enterElsestat(KostLangParser.ElsestatContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link KostLangParser#elsestat}.
+	 * @param ctx the parse tree
+	 */
+	void exitElsestat(KostLangParser.ElsestatContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code single0}
 	 * labeled alternative in {@link KostLangParser#expr0}.

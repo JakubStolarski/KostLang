@@ -1,13 +1,15 @@
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Stack;
 
-enum VarType{ INT, REAL, STRING, BOOL, UNKNOWN }
+enum VarType{ INT, REAL, STRING, BOOL, ID, UNKNOWN }
 
 class Value{ 
 	public String name;
 	public VarType type;
    public int length;
+   public boolean from_var;
 	public Value( String name, VarType type , int length){
 		this.name = name;
 		this.type = type;
@@ -18,12 +20,147 @@ class Value{
 public class LLVMActions extends KostLangBaseListener {
     
     HashMap<String, Value> variables = new HashMap<String, Value>();
+    HashMap<String, Value> local_variables = new HashMap<String, Value>();
+    HashSet<String> functions = new HashSet<String>();
     Stack<Value> stack = new Stack<Value>();
     static int BUFFER_SIZE = 16;
+    String function;
+    Boolean is_global;
+
+    @Override
+    public void enterProg(KostLangParser.ProgContext ctx){
+         is_global = true;
+    }
 
     @Override 
-    public void exitProg(KostLangParser.ProgContext ctx) { 
+    public void exitProg(KostLangParser.ProgContext ctx) {
+      LLVMGenerator.close_main(); 
        System.out.println( LLVMGenerator.generate() );
+    }
+
+   //  @Override
+   //  public void exitSingleparam(KostLangParser.SingleparamContext ctx) {
+   //       String ID = ctx.ID().getText();
+   //       String type = ctx.type().getText();
+   //  }
+
+    @Override
+    public void exitFunction(KostLangParser.FunctionContext ctx){
+         String ID = ctx.ID().getText();
+         functions.add(ID);
+         function = ID;
+         LLVMGenerator.functionstart(ID);
+    }
+
+    @Override
+    public void enterFblock(KostLangParser.FblockContext ctx){
+         is_global = false;
+    }
+
+    @Override
+    public void exitBlock(KostLangParser.BlockContext ctx){
+
+    }
+
+    @Override
+    public void enterBlockif(KostLangParser.BlockifContext ctx){
+      LLVMGenerator.ifstart();
+    }
+
+    @Override
+    public void exitBlockif(KostLangParser.BlockifContext ctx){
+      LLVMGenerator.ifend();
+    }
+
+    @Override
+    public void enterBlockwhile(KostLangParser.BlockwhileContext ctx){
+      LLVMGenerator.whilestart();
+    }
+
+    @Override
+    public void exitBlockwhile(KostLangParser.BlockwhileContext ctx){
+      LLVMGenerator.whileexit();
+    }
+
+    @Override
+    public void enterConditionwhile(KostLangParser.ConditionwhileContext ctx){
+      LLVMGenerator.whilelabel();
+    }
+
+    @Override
+    public void exitEquals(KostLangParser.EqualsContext ctx){
+      Value v2 = stack.pop();
+      Value v1 = stack.pop();
+      if(v1.type != v2.type){
+         error(ctx.getStart().getLine(), "condition type mismatch");
+      }
+      if(v1.type == VarType.INT){
+         LLVMGenerator.icmp(v1.name, v2.name, "eq");
+      }
+      if(v1.type == VarType.REAL){
+         LLVMGenerator.fcmp(v1.name, v2.name, "eq");
+      }
+    }
+
+    @Override
+    public void exitGe(KostLangParser.GeContext ctx){
+      Value v2 = stack.pop();
+      Value v1 = stack.pop();
+      if(v1.type != v2.type){
+         error(ctx.getStart().getLine(), "condition type mismatch");
+      }
+      if(v1.type == VarType.INT){
+         LLVMGenerator.icmp(v1.name, v2.name, "sge");
+      }
+      if(v1.type == VarType.REAL){
+         LLVMGenerator.fcmp(v1.name, v2.name, "oge");
+      }
+    }
+
+    @Override
+    public void exitLe(KostLangParser.LeContext ctx){
+      Value v2 = stack.pop();
+      Value v1 = stack.pop();
+      if(v1.type != v2.type){
+         error(ctx.getStart().getLine(), "condition type mismatch");
+      }
+      if(v1.type == VarType.INT){
+         LLVMGenerator.icmp(v1.name, v2.name, "sle");
+      }
+      if(v1.type == VarType.REAL){
+         LLVMGenerator.fcmp(v1.name, v2.name, "ole");
+      }
+    }
+
+    @Override
+    public void exitGreat(KostLangParser.GreatContext ctx){
+      Value v2 = stack.pop();
+      Value v1 = stack.pop();
+
+      if(v1.type != v2.type){
+         error(ctx.getStart().getLine(), "condition type mismatch");
+      }
+      if(v1.type == VarType.INT){
+         LLVMGenerator.icmp(v1.name, v2.name, "sgt");
+      }
+      if(v1.type == VarType.REAL){
+         LLVMGenerator.fcmp(v1.name, v2.name, "ogt");
+      }
+    }
+
+    @Override
+    public void exitLess(KostLangParser.LessContext ctx){
+      Value v2 = stack.pop();
+      Value v1 = stack.pop();
+      if(v1.type != v2.type){
+         error(ctx.getStart().getLine(), "condition type mismatch");
+      }
+      if(v1.type == VarType.INT){
+         LLVMGenerator.icmp(v1.name, v2.name, "slt");
+      }
+      if(v1.type == VarType.REAL){
+         LLVMGenerator.fcmp(v1.name, v2.name, "oolt");
+      }
     }
 
     @Override 
@@ -63,16 +200,20 @@ public class LLVMActions extends KostLangBaseListener {
       }
       Value v = variables.get(ID);
       if( v.type == VarType.INT ){
-         stack.push( new Value(v.name, VarType.INT, 0) ); 
+         LLVMGenerator.load_i32(ID);
+         stack.push( new Value("%"+(LLVMGenerator.reg-1), VarType.INT, 0) ); 
       }
       if( v.type == VarType.REAL ){
-         stack.push( new Value(v.name, VarType.REAL, 0) );
+         LLVMGenerator.load_double(ID);
+         stack.push( new Value("%"+(LLVMGenerator.reg-1), VarType.REAL, 0) );
       }
       if( v.type == VarType.STRING ){
-         stack.push( new Value(v.name, VarType.STRING, v.length) );
+         LLVMGenerator.load_string(ID);
+         stack.push( new Value("%"+(LLVMGenerator.reg-1), VarType.STRING, v.length) );
       }
       if( v.type == VarType.BOOL){
-         stack.push( new Value(v.name, VarType.BOOL, 0) );
+         LLVMGenerator.load_bool(ID);
+         stack.push( new Value("%"+(LLVMGenerator.reg-1), VarType.BOOL, 0) );
       }
   }
     
@@ -84,6 +225,7 @@ public class LLVMActions extends KostLangBaseListener {
 	  if( v1.type == VarType.INT ){
              LLVMGenerator.add_i32(v1.name, v2.name); 
              Value v = new Value("%"+(LLVMGenerator.reg-1), VarType.INT, 0);
+             System.out.println( v.name );
              stack.push(v);
           }
 	  if( v1.type == VarType.REAL ){
@@ -209,20 +351,22 @@ public class LLVMActions extends KostLangBaseListener {
    @Override
    public void exitAssign(KostLangParser.AssignContext ctx) {
        String ID = ctx.ID().getText();
+       System.out.println(ID);
        Value v = stack.pop();
+       System.out.println(v);
        if( !variables.containsKey(ID) ) {
            variables.put(ID, v);
            if( v.type == VarType.INT ){
-               LLVMGenerator.declare_i32(ID);
+               LLVMGenerator.declare_i32(ID, is_global);
            }
            if( v.type == VarType.STRING ){
-               LLVMGenerator.declare_string(ID);
+               LLVMGenerator.declare_string(ID, is_global);
            }
            if( v.type == VarType.REAL ){
-               LLVMGenerator.declare_double(ID);
+               LLVMGenerator.declare_double(ID, is_global);
            }
            if( v.type == VarType.BOOL ){
-               LLVMGenerator.declare_bool(ID);
+               LLVMGenerator.declare_bool(ID, is_global);
            }
        }
        if( v.type == VarType.INT ){

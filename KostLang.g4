@@ -1,12 +1,50 @@
 grammar KostLang;
 
-prog: (stat? NEWLINE )*
+prog: ((stat|function)? NEWLINE )*
+;
+
+block: (stat? NEWLINE)*
 ;
 
 stat:	 ID '=' expr0		#assign
 	| PRINT ID   		#print
 	| READ ID   		#read
-    | WRITE ID          #write
+    	| WRITE ID          #write
+    	| IF condition DO blockif elsestat? ENDIF #if
+    	| WHILE conditionwhile DO blockwhile ENDWHILE #while
+;
+
+function: FUNCTION ID '(' params? ')' fblock ENDF
+;
+
+params: ID '<=' type (',' ID '<=' type)*
+;
+
+type: 'int'	#inttype
+	|'float'	#floattype
+	|'string'	#stringtype
+;
+
+fblock: (stat? NEWLINE )*
+;
+
+blockif: block
+;
+
+blockwhile: block
+;
+
+condition: expr2 '==' expr2	#equals
+	| expr2 '>=' expr2	#ge
+	| expr2 '<=' expr2	#le
+	| expr2 '>' expr2	#great
+	| expr2 '<' expr2	#less
+;
+
+conditionwhile: condition
+;
+
+elsestat: ELSE block
 ;
 
 expr0:  expr1			#single0
@@ -70,6 +108,30 @@ NEG: '!'
 ;
 
 SIZEOF: 'sizeof'
+;
+
+FUNCTION: 'function'
+;
+
+ENDIF: 'endif'
+;
+
+ENDWHILE: 'endwhile'
+;
+
+ENDF: 'endf'
+;
+
+IF: 'if'
+;
+
+ELSE: 'else'
+;
+
+WHILE: 'while'
+;
+
+DO: 'do'
 ;
 
 STRING :  '"' ( ~('\\'|'"') )* '"'
