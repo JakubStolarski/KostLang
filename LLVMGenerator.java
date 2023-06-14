@@ -69,8 +69,15 @@ class LLVMGenerator{
 
    static void ifend(){
       int b = brstack.pop();
-      buffer += "br label %false"+b+"\n";
+      brstack.push(br);
+      buffer += "br label %exit"+b+"\n";
       buffer += "false"+b+":\n";
+   }
+
+   static void endelse(){
+      int b = brstack.pop();
+      buffer += "br label %exit"+b+"\n";
+      buffer += "exit"+b+":\n";
    }
 
    static void whilelabel(){
@@ -88,8 +95,6 @@ class LLVMGenerator{
    static void whileexit(){
       int b = brstack.pop();
       buffer += "br label %br"+b+"\n";
-      reg++;
-      buffer += "br label %false"+b+"\n";
       buffer += "false"+b+":\n";
    }
 

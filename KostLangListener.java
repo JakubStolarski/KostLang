@@ -219,6 +219,16 @@ public interface KostLangListener extends ParseTreeListener {
 	 */
 	void exitBlockif(KostLangParser.BlockifContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link KostLangParser#elsestat}.
+	 * @param ctx the parse tree
+	 */
+	void enterElsestat(KostLangParser.ElsestatContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link KostLangParser#elsestat}.
+	 * @param ctx the parse tree
+	 */
+	void exitElsestat(KostLangParser.ElsestatContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link KostLangParser#blockwhile}.
 	 * @param ctx the parse tree
 	 */
@@ -298,16 +308,6 @@ public interface KostLangListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitConditionwhile(KostLangParser.ConditionwhileContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link KostLangParser#elsestat}.
-	 * @param ctx the parse tree
-	 */
-	void enterElsestat(KostLangParser.ElsestatContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link KostLangParser#elsestat}.
-	 * @param ctx the parse tree
-	 */
-	void exitElsestat(KostLangParser.ElsestatContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code single0}
 	 * labeled alternative in {@link KostLangParser#expr0}.

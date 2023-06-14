@@ -6,7 +6,9 @@ while a < 3 do
 print hello
 a = a+1
 endwhile
-if a >= 3 do
+if a < 3 do
+print hello
+else 
 print world
 endif
 print a

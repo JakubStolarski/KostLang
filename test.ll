@@ -38,22 +38,21 @@ true1:
 %10 = add i32 %9, 1
 store i32 %10, i32* %a
 br label %br1
-br label %false1
 false1:
-%12 = load i32, i32* %a
-%13 = icmp slt i32 %12, 3
-br i1 %13, label %true2, label %false2
+%11 = load i32, i32* %a
+%12 = icmp slt i32 %11, 3
+br i1 %12, label %true2, label %false2
 true2:
-%14 = load i8*, i8** %world
-%15 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @strps, i32 0, i32 0), i8* %14)
-br label %false2
+%13 = load i8*, i8** %hello
+%14 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @strps, i32 0, i32 0), i8* %13)
+br label %exit2
 false2:
-%16 = load i8*, i8** %hello
-%17 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @strps, i32 0, i32 0), i8* %16)
+%15 = load i8*, i8** %world
+%16 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @strps, i32 0, i32 0), i8* %15)
 br label %exit2
 exit2:
-%18 = load i32, i32* %a
-%19 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @strpi, i32 0, i32 0), i32 %18)
+%17 = load i32, i32* %a
+%18 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @strpi, i32 0, i32 0), i32 %17)
 ret i32 0}
 define double @square(double* %e) nounwind {
 %1 = load double, double* %e

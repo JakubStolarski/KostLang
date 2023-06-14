@@ -244,6 +244,18 @@ public class KostLangBaseListener implements KostLangListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterElsestat(KostLangParser.ElsestatContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitElsestat(KostLangParser.ElsestatContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterBlockwhile(KostLangParser.BlockwhileContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -323,18 +335,6 @@ public class KostLangBaseListener implements KostLangListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitConditionwhile(KostLangParser.ConditionwhileContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterElsestat(KostLangParser.ElsestatContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitElsestat(KostLangParser.ElsestatContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -60,14 +60,6 @@ public class LLVMActions extends KostLangBaseListener {
       function = ID;
     }
 
-   //  @Override
-   //  public void exitFunction(KostLangParser.FunctionContext ctx){
-   //       String ID = ctx.ID().getText();
-   //       functions.add(ID);
-   //       function = ID;
-   //       LLVMGenerator.functionstart(ID);
-   //  }
-
     @Override
     public void enterFblock(KostLangParser.FblockContext ctx){
       if (parameters.isEmpty()){
@@ -140,17 +132,6 @@ public class LLVMActions extends KostLangBaseListener {
       }
     }
 
-   //  @Override
-   //  public void exitFunction(KostLangParser.FunctionContext ctx) {
-   //    //  if( ! localnames.contains(function) ){
-   //    //     LLVMGenerator.assign(set_variable(function), "0");
-   //    //  }
-   //    //  LLVMGenerator.load( "%"+function );
-   //     LLVMGenerator.functionend();
-   //     local_variables = new HashMap<String, Value>();
-   //     is_global = true;
-   //  }
-
     @Override 
     public void exitReturn(KostLangParser.ReturnContext ctx){
       Value v1 = stack.pop();
@@ -189,7 +170,6 @@ public class LLVMActions extends KostLangBaseListener {
 
     @Override
     public void exitArgs(KostLangParser.ArgsContext ctx){
-      
       args_num++;
     }
 
@@ -206,6 +186,11 @@ public class LLVMActions extends KostLangBaseListener {
     @Override
     public void exitBlockif(KostLangParser.BlockifContext ctx){
       LLVMGenerator.ifend();
+    }
+
+    @Override 
+    public void exitElsestat(KostLangParser.ElsestatContext ctx){
+      LLVMGenerator.endelse();
     }
 
     @Override

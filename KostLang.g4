@@ -10,7 +10,7 @@ stat:	 ID '=' expr0		#assign
 	| PRINT ID   		#print
 	| READ ID   		#read
     	| WRITE ID          #write
-    	| IF condition DO blockif elsestat? ENDIF #if
+    	| IF condition DO blockif elsestat #if
     	| WHILE conditionwhile DO blockwhile ENDWHILE #while
     	| call		#funcall
 ;
@@ -41,6 +41,11 @@ fblock: (stat? NEWLINE )*
 blockif: block
 ;
 
+elsestat: ELSE block ENDIF 
+	| ENDIF	
+;
+
+
 blockwhile: block
 ;
 
@@ -52,9 +57,6 @@ condition: expr2 '==' expr2	#equals
 ;
 
 conditionwhile: condition
-;
-
-elsestat: ELSE block
 ;
 
 expr0:  expr1			#single0
