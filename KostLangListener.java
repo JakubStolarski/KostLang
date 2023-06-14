@@ -99,6 +99,28 @@ public interface KostLangListener extends ParseTreeListener {
 	 */
 	void exitWhile(KostLangParser.WhileContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code funcall}
+	 * labeled alternative in {@link KostLangParser#stat}.
+	 * @param ctx the parse tree
+	 */
+	void enterFuncall(KostLangParser.FuncallContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code funcall}
+	 * labeled alternative in {@link KostLangParser#stat}.
+	 * @param ctx the parse tree
+	 */
+	void exitFuncall(KostLangParser.FuncallContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link KostLangParser#call}.
+	 * @param ctx the parse tree
+	 */
+	void enterCall(KostLangParser.CallContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link KostLangParser#call}.
+	 * @param ctx the parse tree
+	 */
+	void exitCall(KostLangParser.CallContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link KostLangParser#function}.
 	 * @param ctx the parse tree
 	 */
@@ -109,51 +131,73 @@ public interface KostLangListener extends ParseTreeListener {
 	 */
 	void exitFunction(KostLangParser.FunctionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link KostLangParser#params}.
-	 * @param ctx the parse tree
-	 */
-	void enterParams(KostLangParser.ParamsContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link KostLangParser#params}.
-	 * @param ctx the parse tree
-	 */
-	void exitParams(KostLangParser.ParamsContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code inttype}
-	 * labeled alternative in {@link KostLangParser#type}.
+	 * labeled alternative in {@link KostLangParser#declare}.
 	 * @param ctx the parse tree
 	 */
 	void enterInttype(KostLangParser.InttypeContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code inttype}
-	 * labeled alternative in {@link KostLangParser#type}.
+	 * labeled alternative in {@link KostLangParser#declare}.
 	 * @param ctx the parse tree
 	 */
 	void exitInttype(KostLangParser.InttypeContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code floattype}
-	 * labeled alternative in {@link KostLangParser#type}.
+	 * Enter a parse tree produced by the {@code realtype}
+	 * labeled alternative in {@link KostLangParser#declare}.
 	 * @param ctx the parse tree
 	 */
-	void enterFloattype(KostLangParser.FloattypeContext ctx);
+	void enterRealtype(KostLangParser.RealtypeContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code floattype}
-	 * labeled alternative in {@link KostLangParser#type}.
+	 * Exit a parse tree produced by the {@code realtype}
+	 * labeled alternative in {@link KostLangParser#declare}.
 	 * @param ctx the parse tree
 	 */
-	void exitFloattype(KostLangParser.FloattypeContext ctx);
+	void exitRealtype(KostLangParser.RealtypeContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code stringtype}
-	 * labeled alternative in {@link KostLangParser#type}.
+	 * Enter a parse tree produced by {@link KostLangParser#return}.
 	 * @param ctx the parse tree
 	 */
-	void enterStringtype(KostLangParser.StringtypeContext ctx);
+	void enterReturn(KostLangParser.ReturnContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code stringtype}
-	 * labeled alternative in {@link KostLangParser#type}.
+	 * Exit a parse tree produced by {@link KostLangParser#return}.
 	 * @param ctx the parse tree
 	 */
-	void exitStringtype(KostLangParser.StringtypeContext ctx);
+	void exitReturn(KostLangParser.ReturnContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code intparam}
+	 * labeled alternative in {@link KostLangParser#params}.
+	 * @param ctx the parse tree
+	 */
+	void enterIntparam(KostLangParser.IntparamContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code intparam}
+	 * labeled alternative in {@link KostLangParser#params}.
+	 * @param ctx the parse tree
+	 */
+	void exitIntparam(KostLangParser.IntparamContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code realparam}
+	 * labeled alternative in {@link KostLangParser#params}.
+	 * @param ctx the parse tree
+	 */
+	void enterRealparam(KostLangParser.RealparamContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code realparam}
+	 * labeled alternative in {@link KostLangParser#params}.
+	 * @param ctx the parse tree
+	 */
+	void exitRealparam(KostLangParser.RealparamContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link KostLangParser#args}.
+	 * @param ctx the parse tree
+	 */
+	void enterArgs(KostLangParser.ArgsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link KostLangParser#args}.
+	 * @param ctx the parse tree
+	 */
+	void exitArgs(KostLangParser.ArgsContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link KostLangParser#fblock}.
 	 * @param ctx the parse tree
@@ -361,17 +405,17 @@ public interface KostLangListener extends ParseTreeListener {
 	 */
 	void exitSize(KostLangParser.SizeContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code id}
+	 * Enter a parse tree produced by the {@code funoperator}
 	 * labeled alternative in {@link KostLangParser#expr2}.
 	 * @param ctx the parse tree
 	 */
-	void enterId(KostLangParser.IdContext ctx);
+	void enterFunoperator(KostLangParser.FunoperatorContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code id}
+	 * Exit a parse tree produced by the {@code funoperator}
 	 * labeled alternative in {@link KostLangParser#expr2}.
 	 * @param ctx the parse tree
 	 */
-	void exitId(KostLangParser.IdContext ctx);
+	void exitFunoperator(KostLangParser.FunoperatorContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code int}
 	 * labeled alternative in {@link KostLangParser#expr2}.
@@ -420,6 +464,18 @@ public interface KostLangListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitString(KostLangParser.StringContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code id}
+	 * labeled alternative in {@link KostLangParser#expr2}.
+	 * @param ctx the parse tree
+	 */
+	void enterId(KostLangParser.IdContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code id}
+	 * labeled alternative in {@link KostLangParser#expr2}.
+	 * @param ctx the parse tree
+	 */
+	void exitId(KostLangParser.IdContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code logicalelem}
 	 * labeled alternative in {@link KostLangParser#expr3}.

@@ -12,15 +12,38 @@ class LLVMGenerator{
 
    static Stack<Integer> brstack = new Stack<Integer>();
 
-   static void functionstart(String id){
+   static void functionstart_1(String id, String type){
       main_text += buffer;
       main_reg = reg;
-      buffer = "define i32 @"+id+"() nounwind {\n";
+      buffer = "define " + type + " @"+id+"(";
       reg = 1;
    }
 
+   static void functionstart_2(String id, String type){
+      main_text += buffer;
+      main_reg = reg;
+      buffer = "define " + type + " @"+id+"(";
+      reg = 1;
+   }
+
+   static void functionstart_end(){
+      buffer += ") nounwind {\n";
+   }
+
+   static void functionstart_params(String id, String type){
+      buffer += type + " %" + id + ", ";
+
+   }
+
+   static void ret_i32(String id){
+      buffer += "ret i32 "+id;
+   }
+
+   static void ret_double(String id){
+      buffer += "ret double "+id;
+   }
+
    static void functionend(){
-      buffer += "ret i32 %"+(reg-1)+"\n";
       buffer += "}\n";
       header_text += buffer;
       buffer = "";
@@ -70,29 +93,52 @@ class LLVMGenerator{
       buffer += "false"+b+":\n";
    }
 
-   static void printf_string(String id){
-      buffer += "%"+reg+" = load i8*, i8** %"+id+"\n";
+   static void printf_string(String id, Boolean global){
+      if (global){
+         buffer += "%"+reg+" = load i8*, i8** @"+id+"\n";
+      }
+      else{
+         buffer += "%"+reg+" = load i8*, i8** %"+id+"\n";
+      }
       reg++;      
       buffer += "%"+reg+" = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @strps, i32 0, i32 0), i8* %"+(reg-1)+")\n";
       reg++;
    }
 
-   static void printf_i32(String id){
-      buffer += "%"+reg+" = load i32, i32* %"+id+"\n";
+   static void printf_i32(String id, Boolean global){
+      if (global){
+         buffer += "%"+reg+" = load i32, i32* @"+id+"\n";
+      }
+      else{
+         buffer += "%"+reg+" = load i32, i32* %"+id+"\n";
+      }
+      
       reg++;
       buffer += "%"+reg+" = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @strpi, i32 0, i32 0), i32 %"+(reg-1)+")\n";
       reg++;
    }
 
-   static void printf_bool(String id){
-      buffer += "%"+reg+" = load i8, i8* %"+id+"\n";
+   static void printf_bool(String id, Boolean global){
+      if (global){
+         buffer += "%"+reg+" = load i8, i8* @"+id+"\n";
+      }
+      else{
+         buffer += "%"+reg+" = load i8, i8* %"+id+"\n";
+      }
+      
       reg++;
       buffer += "%"+reg+" = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @strpi, i32 0, i32 0), i8 %"+(reg-1)+")\n";
       reg++;
    }
 
-      static void printf_double(String id){
-      buffer += "%"+reg+" = load double, double* %"+id+"\n";
+      static void printf_double(String id, Boolean global){
+      if (global){
+         buffer += "%"+reg+" = load double, double* @"+id+"\n";  
+      }
+      else{
+         buffer += "%"+reg+" = load double, double* %"+id+"\n";
+      }
+      
       reg++;
       buffer += "%"+reg+" = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @strpd, i32 0, i32 0), double %"+(reg-1)+")\n";
       reg++;
@@ -109,22 +155,22 @@ class LLVMGenerator{
       reg++;
    }
 
-   static void declare(String id, Boolean global){
-      main_text += "%"+id+" = alloca i32\n";
-   }
-
    static void declare_i32(String id, Boolean global){
       if(global){
          header_text += "@"+id+" = global i32 0\n";
       }
-      buffer += "%"+id+" = alloca i32\n";
+      else{
+         buffer += "%"+id+" = alloca i32\n";
+      }
    }
 
    static void declare_double(String id, Boolean global){
       if(global){
-         header_text += "@"+id+" = global double 0\n";
+         header_text += "@"+id+" = global double 0.0\n";
       }
-      buffer += "%"+id+" = alloca double\n";
+      else{
+         buffer += "%"+id+" = alloca double\n";
+      }
    }
 
    static void declare_bool(String id, Boolean global){
@@ -145,12 +191,26 @@ class LLVMGenerator{
       buffer += "%"+id+" = alloca ["+(l+1)+" x i8]\n";
    }
 
-   static void assign_i32(String id, String value){
-      buffer += "store i32 "+value+", i32* %"+id+"\n";
+   static void assign_i32(String id, String value, Boolean global){
+      if (global){
+         buffer += "%"+reg+" = load i32, i32* @"+id+"\n";
+         reg++;
+         buffer += "store i32 " +value+", i32* @"+id+"\n";
+      }
+      else{
+         buffer += "store i32 "+value+", i32* %"+id+"\n";
+      }
    }
 
-   static void assign_double(String id, String value){
+   static void assign_double(String id, String value, Boolean global){
+      if (global){
+         buffer += "%"+reg+" = load double, double* @"+id+"\n";
+         reg++;
+         buffer += "store double " +value+", double* @"+id+"\n";
+      }
+      else{
       buffer += "store double "+value+", double* %"+id+"\n";
+      }
    }
 
    static void assign_string(String id){  
@@ -163,7 +223,7 @@ class LLVMGenerator{
 
    static void constant_string(String content){
       int l = content.length()+1;     
-      buffer += "@str"+str+" = constant ["+l+" x i8] c\""+content+"\\00\"\n";
+      header_text += "@str"+str+" = constant ["+l+" x i8] c\""+content+"\\00\"\n";
       String n = "str"+str;
       LLVMGenerator.allocate_string(n, (l-1));
       buffer += "%"+reg+" = bitcast ["+l+" x i8]* %"+n+" to i8*\n";
@@ -176,23 +236,45 @@ class LLVMGenerator{
       str++;
    }
    
-   static void load_i32(String id){
-      buffer += "%"+reg+" = load i32, i32* %"+id+"\n";
+   static void load_i32(String id, Boolean global){
+      if (global){
+         buffer += "%"+reg+" = load i32, i32* @"+id+"\n";
+      }
+      else{
+         buffer += "%"+reg+" = load i32, i32* %"+id+"\n";
+      }
       reg++;
    }
 
-   static void load_double(String id){
-      buffer += "%"+reg+" = load double, double* %"+id+"\n";
+   static void load_double(String id, Boolean global){
+      if(global){
+         buffer += "%"+reg+" = load double, double* @"+id+"\n";
+      }
+      else{
+         buffer += "%"+reg+" = load double, double* %"+id+"\n";
+      }
       reg++;
    }
 
-   static void load_string(String id){
-      buffer += "%"+reg+" = load i8*, i8** %"+id+"\n";
+   static void load_string(String id, Boolean global){
+      if(global){
+         buffer += "%"+reg+" = load i8*, i8** @"+id+"\n";
+      }
+      else{
+         buffer += "%"+reg+" = load i8*, i8** %"+id+"\n";
+      }
+
       reg++;
    }
 
-   static void load_bool(String id){
+   static void load_bool(String id, Boolean global){
+      if(global){
+         buffer += "%"+reg+" = load i8, i8* @"+id+"\n";
+      }
+      else{
       buffer += "%"+reg+" = load i8, i8* %"+id+"\n";
+      }
+
       reg++;
    }
 
@@ -253,6 +335,20 @@ class LLVMGenerator{
    static void div_double(String val1, String val2){
       buffer += "%"+reg+" = fdiv double "+val1+", "+val2+"\n";
       reg++;
+   }
+
+   static void call(String id, String type){
+      buffer += "%"+reg+" = call " + type + " @" + id + "(";
+      reg++;
+   }
+
+   static void call_params(String id, String type){
+      buffer += type + " %" + id + ", ";
+
+   }
+
+   static void close_call(){
+      buffer += ")\n";
    }
 
    static void close_main(){

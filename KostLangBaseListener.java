@@ -112,6 +112,30 @@ public class KostLangBaseListener implements KostLangListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterFuncall(KostLangParser.FuncallContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFuncall(KostLangParser.FuncallContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterCall(KostLangParser.CallContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCall(KostLangParser.CallContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterFunction(KostLangParser.FunctionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -119,18 +143,6 @@ public class KostLangBaseListener implements KostLangListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitFunction(KostLangParser.FunctionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterParams(KostLangParser.ParamsContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitParams(KostLangParser.ParamsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -148,25 +160,61 @@ public class KostLangBaseListener implements KostLangListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFloattype(KostLangParser.FloattypeContext ctx) { }
+	@Override public void enterRealtype(KostLangParser.RealtypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFloattype(KostLangParser.FloattypeContext ctx) { }
+	@Override public void exitRealtype(KostLangParser.RealtypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStringtype(KostLangParser.StringtypeContext ctx) { }
+	@Override public void enterReturn(KostLangParser.ReturnContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStringtype(KostLangParser.StringtypeContext ctx) { }
+	@Override public void exitReturn(KostLangParser.ReturnContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterIntparam(KostLangParser.IntparamContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIntparam(KostLangParser.IntparamContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterRealparam(KostLangParser.RealparamContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitRealparam(KostLangParser.RealparamContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterArgs(KostLangParser.ArgsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitArgs(KostLangParser.ArgsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -388,13 +436,13 @@ public class KostLangBaseListener implements KostLangListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterId(KostLangParser.IdContext ctx) { }
+	@Override public void enterFunoperator(KostLangParser.FunoperatorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitId(KostLangParser.IdContext ctx) { }
+	@Override public void exitFunoperator(KostLangParser.FunoperatorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -443,6 +491,18 @@ public class KostLangBaseListener implements KostLangListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitString(KostLangParser.StringContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterId(KostLangParser.IdContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitId(KostLangParser.IdContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

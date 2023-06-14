@@ -12,17 +12,27 @@ stat:	 ID '=' expr0		#assign
     	| WRITE ID          #write
     	| IF condition DO blockif elsestat? ENDIF #if
     	| WHILE conditionwhile DO blockwhile ENDWHILE #while
+    	| call		#funcall
 ;
 
-function: FUNCTION ID '(' params? ')' fblock ENDF
+call: ID '(' args? ')'	
 ;
 
-params: ID '<=' type (',' ID '<=' type)*
+function: declare '(' params? ')' fblock return ENDF
 ;
 
-type: 'int'	#inttype
-	|'float'	#floattype
-	|'string'	#stringtype
+declare: INTTYPE ID	#inttype
+	| REALTYPE ID #realtype
+;
+
+return: 'return' expr2
+;
+
+params: ID ':' INTTYPE (',' params)*	#intparam
+	| ID ':' REALTYPE (',' params)* #realparam
+;
+
+args: expr2 (',' args)*
 ;
 
 fblock: (stat? NEWLINE )*
@@ -59,11 +69,12 @@ expr1:  expr2			#single1
       | SIZEOF expr2        #size 
 ;
 
-expr2: ID          #id     
+expr2: call #funoperator   
       | INT			#int
       | REAL			#real
       | '(' expr0 ')'		#par
       | STRING          #string
+      | ID          #id  
 ;
 
 expr3: expr4        #logicalelem
@@ -110,9 +121,6 @@ NEG: '!'
 SIZEOF: 'sizeof'
 ;
 
-FUNCTION: 'function'
-;
-
 ENDIF: 'endif'
 ;
 
@@ -132,6 +140,12 @@ WHILE: 'while'
 ;
 
 DO: 'do'
+;
+
+INTTYPE: 'int'
+;
+
+REALTYPE: 'real'
 ;
 
 STRING :  '"' ( ~('\\'|'"') )* '"'

@@ -1,6 +1,7 @@
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Stack;
 
 enum VarType{ INT, REAL, STRING, BOOL, ID, UNKNOWN }
@@ -21,9 +22,14 @@ public class LLVMActions extends KostLangBaseListener {
     
     HashMap<String, Value> variables = new HashMap<String, Value>();
     HashMap<String, Value> local_variables = new HashMap<String, Value>();
-    HashSet<String> functions = new HashSet<String>();
+    HashMap<String, String> functions = new HashMap<String, String>();
+    HashMap<String, Integer> function_param_num = new HashMap<String, Integer>();
+    HashMap<String, String> parameters = new HashMap<String, String>();
     Stack<Value> stack = new Stack<Value>();
     static int BUFFER_SIZE = 16;
+    static int param_num = 0;
+    static int args_num = 0; 
+    static int helper = 1;  // helper variables are declared and assigned to act as args for functions 
     String function;
     Boolean is_global;
 
@@ -38,23 +44,153 @@ public class LLVMActions extends KostLangBaseListener {
        System.out.println( LLVMGenerator.generate() );
     }
 
-   //  @Override
-   //  public void exitSingleparam(KostLangParser.SingleparamContext ctx) {
-   //       String ID = ctx.ID().getText();
-   //       String type = ctx.type().getText();
-   //  }
-
     @Override
-    public void exitFunction(KostLangParser.FunctionContext ctx){
-         String ID = ctx.ID().getText();
-         functions.add(ID);
-         function = ID;
-         LLVMGenerator.functionstart(ID);
+    public void exitInttype(KostLangParser.InttypeContext ctx){
+      String ID = ctx.ID().getText();
+      String type = ctx.INTTYPE().getText();
+      functions.put(ID, "i32");
+      function = ID;
     }
 
     @Override
+    public void exitRealtype(KostLangParser.RealtypeContext ctx){
+      String ID = ctx.ID().getText();
+      String type = ctx.REALTYPE().getText();
+      functions.put(ID, "double");
+      function = ID;
+    }
+
+   //  @Override
+   //  public void exitFunction(KostLangParser.FunctionContext ctx){
+   //       String ID = ctx.ID().getText();
+   //       functions.add(ID);
+   //       function = ID;
+   //       LLVMGenerator.functionstart(ID);
+   //  }
+
+    @Override
     public void enterFblock(KostLangParser.FblockContext ctx){
-         is_global = false;
+      if (parameters.isEmpty()){
+         LLVMGenerator.functionstart_1(function, functions.get(function));
+         function_param_num.put(function, 0);
+      }
+      else{
+         int param_num = parameters.size();
+         LLVMGenerator.functionstart_2(function, functions.get(function));
+         parameters.forEach((key,value) -> {
+            LLVMGenerator.functionstart_params(key,value);
+         });
+         function_param_num.put(function, param_num);
+         LLVMGenerator.buffer = (LLVMGenerator.buffer.substring(0, LLVMGenerator.buffer.length() - 2)); //remove comma after the last param
+         parameters = new HashMap<String, String>();
+      }
+      LLVMGenerator.functionstart_end();
+      is_global = false;
+    }
+
+    @Override
+    public void exitCall(KostLangParser.CallContext ctx){
+      String ID = ctx.ID().getText();
+      if(functions.containsKey(ID)){
+         int param_num = function_param_num.get(ID);
+         if(!(args_num==param_num)){
+            error(ctx.getStart().getLine(), "wrong number of arguments");
+         }
+
+         String[] argtypes = new String[args_num];
+         for(int i=0; i < param_num; i++){
+            String help_id = "helper"+helper;
+            Value v = stack.pop();
+            if( v.type == VarType.INT ){
+               LLVMGenerator.declare_i32(help_id, false);
+               LLVMGenerator.assign_i32(help_id, v.name, false);
+               argtypes[i] = "i32*";
+            }
+            if( v.type == VarType.REAL ){
+               LLVMGenerator.declare_double(help_id, false);
+               LLVMGenerator.assign_double(help_id, v.name, false);
+               argtypes[i] = "double*";
+            }
+            helper++;
+         } 
+
+         String type = functions.get(ID);
+         LLVMGenerator.call(ID, type);
+         // This script will read values given as arguments be they INT, REAL or ID and put them on the stack
+         // Then those values will be taken from the stack, assigned to helper variables in a "backward" manner
+         // and written as arguments in function call.
+         for(int j = helper-1; j>helper-1-args_num; j--){  
+            LLVMGenerator.call_params("helper"+j,argtypes[j-(helper-args_num)]);
+         }
+         if(args_num > 0){
+            LLVMGenerator.buffer = (LLVMGenerator.buffer.substring(0, LLVMGenerator.buffer.length() - 2));
+         }
+         args_num =0; // clear args count for potential future use
+         LLVMGenerator.close_call();
+
+         if (type == "i32"){
+            stack.push(new Value("%"+(LLVMGenerator.reg-1), VarType.INT, 0));
+         }
+         else if (type =="double"){
+            stack.push(new Value("%"+(LLVMGenerator.reg-1), VarType.REAL, 0));
+         }
+      }
+      else{
+         error(ctx.getStart().getLine(), "unknown function");
+      }
+    }
+
+   //  @Override
+   //  public void exitFunction(KostLangParser.FunctionContext ctx) {
+   //    //  if( ! localnames.contains(function) ){
+   //    //     LLVMGenerator.assign(set_variable(function), "0");
+   //    //  }
+   //    //  LLVMGenerator.load( "%"+function );
+   //     LLVMGenerator.functionend();
+   //     local_variables = new HashMap<String, Value>();
+   //     is_global = true;
+   //  }
+
+    @Override 
+    public void exitReturn(KostLangParser.ReturnContext ctx){
+      Value v1 = stack.pop();
+      if( v1.type == VarType.INT ){
+         LLVMGenerator.ret_i32(v1.name); 
+         Value v = new Value(null, VarType.INT, 0);
+         stack.push(v);
+      }
+      if( v1.type == VarType.REAL ){
+        LLVMGenerator.ret_double(v1.name); 
+        Value v = new Value(null, VarType.REAL, 0);
+        stack.push(v);
+     }
+     LLVMGenerator.functionend();
+     local_variables = new HashMap<String, Value>();
+     is_global = true;
+   }
+
+    @Override
+    public void exitIntparam(KostLangParser.IntparamContext ctx){
+      String ID =  ctx.ID().getText();
+      String type = ctx.INTTYPE().getText();
+      parameters.put(ID,"i32*");
+      local_variables.put(ID,new Value(null, VarType.INT, 0));
+      param_num++;
+    }
+
+    @Override
+    public void exitRealparam(KostLangParser.RealparamContext ctx){
+      String ID =  ctx.ID().getText();
+      String type = ctx.REALTYPE().getText();
+      parameters.put(ID,"double*");
+      local_variables.put(ID,new Value(null, VarType.REAL, 0));
+      param_num++;
+    }
+
+    @Override
+    public void exitArgs(KostLangParser.ArgsContext ctx){
+      
+      args_num++;
     }
 
     @Override
@@ -195,26 +331,34 @@ public class LLVMActions extends KostLangBaseListener {
     @Override
     public void exitId(KostLangParser.IdContext ctx){
       String ID = ctx.ID().getText();
-      if( !variables.containsKey(ID) ) {
+      if( !variables.containsKey(ID) && !local_variables.containsKey(ID) && !functions.containsKey(ID)) {
          error(ctx.getStart().getLine(), "unknown variable");
       }
-      Value v = variables.get(ID);
-      if( v.type == VarType.INT ){
-         LLVMGenerator.load_i32(ID);
-         stack.push( new Value("%"+(LLVMGenerator.reg-1), VarType.INT, 0) ); 
-      }
-      if( v.type == VarType.REAL ){
-         LLVMGenerator.load_double(ID);
-         stack.push( new Value("%"+(LLVMGenerator.reg-1), VarType.REAL, 0) );
-      }
-      if( v.type == VarType.STRING ){
-         LLVMGenerator.load_string(ID);
-         stack.push( new Value("%"+(LLVMGenerator.reg-1), VarType.STRING, v.length) );
-      }
-      if( v.type == VarType.BOOL){
-         LLVMGenerator.load_bool(ID);
-         stack.push( new Value("%"+(LLVMGenerator.reg-1), VarType.BOOL, 0) );
-      }
+      if( variables.containsKey(ID) || local_variables.containsKey(ID)){
+         Value v=null;
+         if(variables.containsKey(ID) ){
+            v = variables.get(ID);
+         }
+         if(local_variables.containsKey(ID)){
+            v = local_variables.get(ID); 
+         }
+         if( v.type == VarType.INT ){
+            LLVMGenerator.load_i32(ID, is_global);
+            stack.push( new Value("%"+(LLVMGenerator.reg-1), VarType.INT, 0) ); 
+         }
+         if( v.type == VarType.REAL ){
+            LLVMGenerator.load_double(ID, is_global);
+            stack.push( new Value("%"+(LLVMGenerator.reg-1), VarType.REAL, 0) );
+         }
+         if( v.type == VarType.STRING ){
+            LLVMGenerator.load_string(ID, is_global);
+            stack.push( new Value("%"+(LLVMGenerator.reg-1), VarType.STRING, v.length) );
+         }
+         if( v.type == VarType.BOOL){
+            LLVMGenerator.load_bool(ID, is_global);
+            stack.push( new Value("%"+(LLVMGenerator.reg-1), VarType.BOOL, 0) );
+         }
+   }
   }
     
     @Override 
@@ -225,7 +369,6 @@ public class LLVMActions extends KostLangBaseListener {
 	  if( v1.type == VarType.INT ){
              LLVMGenerator.add_i32(v1.name, v2.name); 
              Value v = new Value("%"+(LLVMGenerator.reg-1), VarType.INT, 0);
-             System.out.println( v.name );
              stack.push(v);
           }
 	  if( v1.type == VarType.REAL ){
@@ -351,11 +494,16 @@ public class LLVMActions extends KostLangBaseListener {
    @Override
    public void exitAssign(KostLangParser.AssignContext ctx) {
        String ID = ctx.ID().getText();
-       System.out.println(ID);
        Value v = stack.pop();
-       System.out.println(v);
-       if( !variables.containsKey(ID) ) {
-           variables.put(ID, v);
+       Boolean addresing_global = false;
+       if( !variables.containsKey(ID) && !local_variables.containsKey(ID)) {
+         if (is_global){
+            variables.put(ID, v);
+         }
+         else{
+            local_variables.put(ID,v);
+         }
+          
            if( v.type == VarType.INT ){
                LLVMGenerator.declare_i32(ID, is_global);
            }
@@ -369,11 +517,20 @@ public class LLVMActions extends KostLangBaseListener {
                LLVMGenerator.declare_bool(ID, is_global);
            }
        }
+      if (variables.containsKey(ID)){
+         addresing_global = true;
+      }
        if( v.type == VarType.INT ){
-           LLVMGenerator.assign_i32(ID, v.name);
+            if(v.name == null){
+               LLVMGenerator.assign_i32(ID, Integer.toString(LLVMGenerator.reg-1), addresing_global);
+            }
+           LLVMGenerator.assign_i32(ID, v.name, addresing_global);
        }
        if( v.type == VarType.REAL ){
-           LLVMGenerator.assign_double(ID, v.name);
+         if(v.name == null){
+            LLVMGenerator.assign_double(ID, "%"+Integer.toString(LLVMGenerator.reg-1), addresing_global);
+         }
+           LLVMGenerator.assign_double(ID, v.name, addresing_global);
        }
        if( v.type == VarType.STRING ){
            LLVMGenerator.assign_string(ID);
@@ -386,20 +543,29 @@ public class LLVMActions extends KostLangBaseListener {
     @Override
     public void exitPrint(KostLangParser.PrintContext ctx) {
        String ID = ctx.ID().getText();
-       if( variables.containsKey(ID) ) {
-          Value v = variables.get( ID );
-          if( v.type != null ) {
+       if( variables.containsKey(ID) || local_variables.containsKey(ID)) {
+         Boolean addresing_global = false;
+         Value v = null;
+         if (variables.containsKey(ID)){
+            v = variables.get( ID );
+            addresing_global = true;
+         }
+         else{
+            v = local_variables.get( ID );
+         }
+          
+          if( v.type != null) {
              if( v.type == VarType.INT ){
-                LLVMGenerator.printf_i32( ID );
+                LLVMGenerator.printf_i32( ID, addresing_global );
              }
              if( v.type == VarType.REAL ){
-                LLVMGenerator.printf_double( ID );
+                LLVMGenerator.printf_double( ID, addresing_global );
              }
              if( v.type == VarType.STRING ){
-                LLVMGenerator.printf_string( ID );
+                LLVMGenerator.printf_string( ID, addresing_global );
              }
              if( v.type == VarType.BOOL ){
-               LLVMGenerator.printf_bool(ID);
+               LLVMGenerator.printf_bool(ID, addresing_global);
              }
           }  
        } else {
@@ -407,7 +573,7 @@ public class LLVMActions extends KostLangBaseListener {
        }       
     } 
    @Override
-   public void exitRead(KostLangParser.ReadContext ctx) {
+   public void exitRead(KostLangParser.ReadContext ctx) { //fix scanf for int and float
       String ID = ctx.ID().getText();
       Value v = new Value(ID, VarType.STRING, BUFFER_SIZE-1);
       variables.put(ID, v);
