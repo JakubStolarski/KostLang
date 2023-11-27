@@ -1,2 +1,2 @@
 # KostLang
-Creating a simple languge using ANTLR 
+Creating a simple language using ANTLR 
